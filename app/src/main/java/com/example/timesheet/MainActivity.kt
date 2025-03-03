@@ -11,6 +11,7 @@ import com.example.timesheet.ui.screen.ForgotScreen
 import com.example.timesheet.ui.screen.TimeSheetLoginScreen
 import com.example.timesheet.ui.screen.HomeScreen
 import com.example.timesheet.ui.screen.AttendanceScreen
+import com.example.timesheet.ui.screen.SignUpScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +22,7 @@ class MainActivity : ComponentActivity() {
 
             NavHost(navController = navController, startDestination = "login") {
                 composable("login") { TimeSheetLoginScreen(navController) }
+                composable("signup") { SignUpScreen(navController) }
                 composable("forgot") { ForgotScreen(navController) }
                 composable("home") { HomeScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }
                 composable("attendance_screen") { AttendanceScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }

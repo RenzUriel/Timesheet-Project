@@ -103,7 +103,7 @@ fun TimeSheetLoginScreen(navController: NavController) {
             text = "Create a new account",
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.clickable { /* Future Navigation to Signup Screen */ },
+            modifier = Modifier.clickable { navController.navigate("signup") },
             color = Color(0xFF4C60A9),
             style = MaterialTheme.typography.bodySmall
         )

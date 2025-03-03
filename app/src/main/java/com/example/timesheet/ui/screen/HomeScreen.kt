@@ -4,6 +4,8 @@ import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -22,19 +24,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
+import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
+import com.example.timesheet.ui.components.AttendanceItem
+import com.example.timesheet.ui.components.AttendanceTableHeader
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClockIn: () -> Unit) {
+fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClockIn: (Boolean) -> Unit) {
     val context = LocalContext.current
     val timeFormat = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
     val currentDate = remember { SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(Date()) }
+    val attendanceData = getAttendanceData()
 
     var isDrawerOpen by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
@@ -80,27 +86,34 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
         }
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(
+            LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
                     .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                InfoCard(R.drawable.calendar, currentDate) {
-                    Text("Have a Nice Day!", modifier = Modifier.fillMaxWidth())
+                item {
+                    InfoCard(R.drawable.calendar, currentDate) {
+                        Text("Have a Nice Day!", modifier = Modifier.fillMaxWidth())
+                    }
                 }
-
-                InfoCard(R.drawable.clock, "Time Clock") {
-                    Text(formatElapsedTime(elapsedTime), modifier = Modifier.fillMaxWidth())
+                item {
+                    InfoCard(R.drawable.clock, "Time Clock") {
+                        Text(formatElapsedTime(elapsedTime), modifier = Modifier.fillMaxWidth())
+                    }
                 }
+                item {
+                    InfoCard(R.drawable.people, "Attendance") {
+                        AttendanceTableHeader()
 
-                InfoCard(R.drawable.people, "Attendance") {
-                    Text("", modifier = Modifier.fillMaxWidth())
+                    }
                 }
-
-                InfoCard(null, "Tracked Hours") {
-                    TrackedHoursGraph()
+                item {
+                    InfoCard(null, "Tracked Hours") {
+                        TrackedHoursGraph()
+                    }
                 }
             }
 
