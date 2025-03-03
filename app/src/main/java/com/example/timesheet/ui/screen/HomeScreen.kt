@@ -2,7 +2,6 @@ package com.example.timesheet.ui.screen
 
 import android.widget.Toast
 import androidx.compose.animation.*
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,7 +22,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.ui.screen.DrawerMenu
+import com.example.timesheet.data.TrackedHoursGraph
+import com.example.timesheet.features.ClockInOutButton
+import com.example.timesheet.features.DrawerMenu
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,53 +37,16 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
     val currentDate = remember { SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(Date()) }
 
     var isDrawerOpen by remember { mutableStateOf(false) }
-    var isClockedIn by remember { mutableStateOf(false) }
-    var clockTime by remember { mutableStateOf("") }
     var elapsedTime by remember { mutableStateOf(0L) }
-    var startTime by remember { mutableStateOf<Long?>(null) }
-
-    val currentClockedInState by rememberUpdatedState(isClockedIn)
-
-    LaunchedEffect(currentClockedInState) {
-        if (currentClockedInState) {
-            startTime = System.currentTimeMillis()
-            while (currentClockedInState) {
-                elapsedTime = (System.currentTimeMillis() - (startTime ?: 0)) / 1000
-                delay(1000)
-            }
-        } else {
-            startTime = null
-        }
-    }
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    isClockedIn = !isClockedIn
-                    clockTime = timeFormat.format(Date())
-
-                    val message = if (isClockedIn) "Clocked-In at $clockTime" else "Clocked-Out at $clockTime"
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                },
-                containerColor = if (isClockedIn) Color(0xFF9A3636) else Color(0xFF499A36)
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(if (isClockedIn) R.drawable.stop_circle else R.drawable.play_circle),
-                        contentDescription = if (isClockedIn) "Clock Out" else "Clock In",
-                        colorFilter = ColorFilter.tint(Color.White)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = if (isClockedIn) "Clock Out" else "Clock In",
-                        color = Color.White
-                    )
-                }
-            }
+            ClockInOutButton(
+                isClockedIn = isClockedIn,
+                onClockToggle = onToggleClockIn,
+                elapsedTime = elapsedTime,
+                updateElapsedTime = { elapsedTime = it }
+            )
         },
         topBar = {
             TopAppBar(
@@ -102,9 +65,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                 exit = fadeOut() + slideOutVertically { it }
             ) {
                 BottomAppBar(
-                    modifier = Modifier
-                        .height(65.dp)
-                        .background(Color.Transparent),
+                    modifier = Modifier.height(65.dp),
                     containerColor = Color.Transparent
                 ) {
                     Row(
@@ -126,10 +87,21 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                InfoCard(R.drawable.calendar, "Today is", currentDate)
-                InfoCard(R.drawable.clock, "Time Clock", formatElapsedTime(elapsedTime))
-                InfoCard(R.drawable.people, "Attendance", "")
-                InfoCard(null, "Tracked Hours", "")
+                InfoCard(R.drawable.calendar, currentDate) {
+                    Text("Have a Nice Day!", modifier = Modifier.fillMaxWidth())
+                }
+
+                InfoCard(R.drawable.clock, "Time Clock") {
+                    Text(formatElapsedTime(elapsedTime), modifier = Modifier.fillMaxWidth())
+                }
+
+                InfoCard(R.drawable.people, "Attendance") {
+                    Text("", modifier = Modifier.fillMaxWidth())
+                }
+
+                InfoCard(null, "Tracked Hours") {
+                    TrackedHoursGraph()
+                }
             }
 
             AnimatedVisibility(
@@ -144,7 +116,11 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
 }
 
 @Composable
-fun InfoCard(iconRes: Int?, title: String, content: String) {
+fun InfoCard(
+    iconRes: Int?,
+    title: String,
+    content: @Composable () -> Unit
+) {
     Card(
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier
@@ -152,10 +128,15 @@ fun InfoCard(iconRes: Int?, title: String, content: String) {
             .padding(bottom = 16.dp)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically, // Align icon & title
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 iconRes?.let {
                     Icon(
                         painter = painterResource(id = it),
@@ -168,20 +149,21 @@ fun InfoCard(iconRes: Int?, title: String, content: String) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start
                 )
             }
-            if (content.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center
-                )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                modifier = Modifier.padding(start = if (iconRes != null) 28.dp else 0.dp) // Indent content if icon exists
+            ) {
+                content()
             }
         }
     }
 }
+
+
 
 @Composable
 fun NavigationItem(label: String, navController: NavController, iconRes: Int, route: String, color: Color = Color.Gray, onClick: (() -> Unit)? = null) {
@@ -216,6 +198,3 @@ fun PreviewHomeScreen() {
 
     HomeScreen(navController, isClockedIn) { isClockedIn = !isClockedIn }
 }
-
-
-
