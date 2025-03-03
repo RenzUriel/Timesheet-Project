@@ -105,9 +105,19 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     }
                 }
                 item {
-                    InfoCard(R.drawable.people, "Attendance") {
-                        AttendanceTableHeader()
-
+                    // Attendance InfoCard
+                    InfoCard(null, "Attendance") {
+                        Column {
+                            AttendanceTableHeader()
+                            LazyColumn(
+                                verticalArrangement = Arrangement.spacedBy(8.dp),
+                                modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp) // Set a max height
+                            ) {
+                                itemsIndexed(attendanceData) { index, attendance ->
+                                    AttendanceItem(attendance = attendance, index = index)
+                                }
+                            }
+                        }
                     }
                 }
                 item {

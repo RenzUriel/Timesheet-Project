@@ -111,7 +111,6 @@ fun SignUpScreen(navController: NavController){
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             modifier = Modifier.clickable {navController.navigate("login")},
-            color = Color(0xFF4C60A9),
             style = MaterialTheme.typography.bodySmall
         )
     }

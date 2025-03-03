@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.text.font.FontWeight
+import com.example.timesheet.ui.components.StandardButton
+
 
 @Composable
 fun ForgotScreen(navController: NavController) {
@@ -39,23 +41,23 @@ fun ForgotScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Forgot Password?",
-                fontSize = 24.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF4C60A9),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Enter your email and you will receive a confirmation email",
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
+                fontSize = 12.sp,
+                textAlign = TextAlign.Start
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -70,16 +72,7 @@ fun ForgotScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = { /* Handle next action */ },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C60A9))
-
-            ) {
-                Text("Next", color = Color.White)
-
-            }
+            StandardButton(text = "Next", onClick = {})
         }
     }
 }

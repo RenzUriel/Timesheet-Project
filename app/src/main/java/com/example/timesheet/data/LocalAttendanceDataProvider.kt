@@ -24,7 +24,22 @@ object LocalAttendanceDataProvider {
                 timeIn = "09:30 AM",
                 timeOut = "05:00 PM",
                 location = "Client Site"
-            )
+            ),AttendanceSheetData(
+                date = "2025-02-25",
+                timeIn = "09:30 AM",
+                timeOut = "05:00 PM",
+                location = "Client Site"
+            ),AttendanceSheetData(
+                date = "2025-02-25",
+                timeIn = "09:30 AM",
+                timeOut = "05:00 PM",
+                location = "Client Site"
+            ),AttendanceSheetData(
+                date = "2025-02-25",
+                timeIn = "09:30 AM",
+                timeOut = "05:00 PM",
+                location = "Client Site"
+            ),
             // Add more attendance records as needed
         )
     }

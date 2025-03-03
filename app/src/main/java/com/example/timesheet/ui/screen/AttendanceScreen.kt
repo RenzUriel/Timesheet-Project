@@ -30,6 +30,7 @@ import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.ui.components.AttendanceItem
 import com.example.timesheet.ui.components.AttendanceTableHeader
+import com.example.timesheet.ui.components.DateInputTextField
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -124,13 +125,13 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                com.example.timesheet.ui.components.DateInputTextField(
+                                DateInputTextField(
                                     value = fromInput,
                                     onValueChange = { fromInput = it },
                                     label = "From",
                                     modifier = Modifier.weight(1f)
                                 )
-                                com.example.timesheet.ui.components.DateInputTextField(
+                                DateInputTextField(
                                     value = toInput,
                                     onValueChange = { toInput = it },
                                     label = "To",
