@@ -30,6 +30,8 @@ import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.ui.components.AttendanceItem
 import com.example.timesheet.ui.components.AttendanceTableHeader
+import com.example.timesheet.ui.components.TopBar
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,7 +43,16 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
     val timeFormat = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
     var isDrawerOpen by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
-
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Box(modifier = Modifier.fillMaxHeight().width(300.dp).background(Color.LightGray)) {
+                DrawerMenu(navController) { scope.launch { drawerState.close() } }
+            }
+        }
+    ) {
     Scaffold(
         floatingActionButton = {
             ClockInOutButton(
@@ -51,16 +62,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                 updateElapsedTime = { elapsedTime = it }
             )
         },
-        topBar = {
-            TopAppBar(
-                title = { Text("Jairosoft", fontSize = 24.sp, fontWeight = FontWeight.Bold) },
-                actions = {
-                    IconButton(onClick = { isDrawerOpen = !isDrawerOpen }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                }
-            )
-        },
+        topBar = { TopBar(navController) { scope.launch { drawerState.open() } } },
         bottomBar = {
             AnimatedVisibility(
                 visible = !isDrawerOpen,
@@ -94,8 +96,8 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                    .padding(15.dp),
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 item {
                     Text("Generate Reports", modifier = Modifier.padding(bottom = 25.dp))
@@ -118,7 +120,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                 }
 
                 item {
-                    Card(modifier = Modifier.padding(top = 16.dp)) {
+                    Card(colors = CardDefaults.cardColors(containerColor = Color.Transparent), modifier = Modifier.padding(top = 16.dp)) {
                         Column(modifier = Modifier.padding(8.dp)) {
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -143,7 +145,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                                         .sizeIn(minWidth = 80.dp, minHeight = 28.dp)
                                         .padding(2.dp),
                                     shape = RoundedCornerShape(8.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C50A9))
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C60A9))
                                 ) {
                                     Text("Download Report", color = Color.White, fontSize = 10.sp)
                                 }
@@ -154,24 +156,17 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
 
                 item {
                     AttendanceTableHeader()
+
                 }
 
                 itemsIndexed(attendanceData) { index, attendance ->
                     AttendanceItem(attendance, index)
                 }
             }
-
-            AnimatedVisibility(
-                visible = isDrawerOpen,
-                enter = slideInHorizontally { it },
-                exit = slideOutHorizontally { it }
-            ) {
-                DrawerMenu(navController) { isDrawerOpen = false }
-            }
         }
     }
 }
-
+}
 
 @Preview(showBackground = true)
 @Composable

@@ -1,18 +1,18 @@
 package com.example.timesheet.features
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,48 +26,77 @@ import com.example.timesheet.R
 @Composable
 fun DrawerMenu(navController: NavController, onClose: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(true) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF4C60A9)),
-        contentAlignment = Alignment.Center
+        modifier = Modifier.fillMaxSize()
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start
+                .fillMaxHeight()
+                .fillMaxWidth()
+                .background(Color(0xFFD0D8F0))
+                .align(Alignment.CenterEnd)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Menu", color = Color.White, fontSize = 24.sp)
-                IconButton(onClick = onClose) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Close", tint = Color.White)
-                }
-            }
-            Spacer(modifier = Modifier.height(30.dp))
-            Text("Admin", fontSize = 24.sp, color = Color.White, fontWeight = FontWeight.Bold)
-            Text("Administrator", fontSize = 16.sp, color = Color.White)
-
-            Row(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp)
-                    .clickable { showDialog = true },
-                verticalAlignment = Alignment.CenterVertically
+                    .fillMaxHeight()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.logout),
-                    contentDescription = "Logout",
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.White
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text("Logout", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Medium)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(modifier = Modifier.size(80.dp)) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.people),
+                            contentDescription = "Profile Picture",
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(CircleShape)
+                                .border(2.dp, Color.Gray, CircleShape),
+                            tint = Color.Gray
+                        )
+                        Icon(
+                            painter = painterResource(id = R.drawable.edit),
+                            contentDescription = "Edit Profile",
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.BottomEnd)
+                                .clip(CircleShape)
+                                .clickable { /* Handle edit click */ },
+                            tint = Color.Black
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text("Admin", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text("Administrator", fontSize = 16.sp, color = Color.Gray)
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Logout Button
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { showDialog = true }
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.logout),
+                        contentDescription = "Logout Icon",
+                        tint = Color(0xFF9A3636),
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Logout", color = Color(0xFF9A3636), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                }
             }
         }
     }
@@ -98,6 +127,5 @@ fun DrawerMenu(navController: NavController, onClose: () -> Unit) {
 @Composable
 fun PreviewDrawerMenu() {
     val navController = rememberNavController()
-
     DrawerMenu(navController = navController, onClose = {})
 }
