@@ -28,36 +28,20 @@ fun DrawerMenu(navController: NavController, onClose: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF4C60A9)),
+        modifier = Modifier.fillMaxSize().background(Color(0xFF4C60A9)),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(16.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Menu", color = Color.White, fontSize = 24.sp)
-                IconButton(onClick = onClose) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Close", tint = Color.White)
-                }
-            }
+
             Spacer(modifier = Modifier.height(30.dp))
             Text("Admin", fontSize = 24.sp, color = Color.White, fontWeight = FontWeight.Bold)
             Text("Administrator", fontSize = 16.sp, color = Color.White)
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp)
-                    .clickable { showDialog = true },
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp).clickable { showDialog = true },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(

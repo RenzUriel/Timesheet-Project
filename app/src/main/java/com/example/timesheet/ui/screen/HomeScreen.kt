@@ -30,7 +30,9 @@ import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.ui.components.AttendanceItem
 import com.example.timesheet.ui.components.AttendanceTableHeader
+import com.example.timesheet.ui.components.TopBar
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -45,94 +47,109 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
     var isDrawerOpen by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
 
-    Scaffold(
-        floatingActionButton = {
-            ClockInOutButton(
-                isClockedIn = isClockedIn,
-                onClockToggle = onToggleClockIn,
-                elapsedTime = elapsedTime,
-                updateElapsedTime = { elapsedTime = it }
-            )
-        },
-        topBar = {
-            TopAppBar(
-                title = { Text("Jairosoft", fontSize = 24.sp, fontWeight = FontWeight.Bold) },
-                actions = {
-                    IconButton(onClick = { isDrawerOpen = !isDrawerOpen }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                }
-            )
-        },
-        bottomBar = {
-            AnimatedVisibility(
-                visible = !isDrawerOpen,
-                enter = fadeIn() + slideInVertically { it },
-                exit = fadeOut() + slideOutVertically { it }
-            ) {
-                BottomAppBar(
-                    modifier = Modifier.height(65.dp),
-                    containerColor = Color.Transparent
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            Box(modifier = Modifier.fillMaxHeight().width(300.dp).background(Color.LightGray)) {
+                DrawerMenu(navController) { scope.launch { drawerState.close() } }
+            }
+        }
+    ) {
+        Scaffold(
+
+            topBar = {TopBar(navController) { scope.launch { drawerState.open() } }},
+            floatingActionButton = {
+                ClockInOutButton(
+                    isClockedIn = isClockedIn,
+                    onClockToggle = onToggleClockIn,
+                    elapsedTime = elapsedTime,
+                    updateElapsedTime = { elapsedTime = it }
+                )
+            },
+            bottomBar = {
+                AnimatedVisibility(
+                    visible = !isDrawerOpen,
+                    enter = fadeIn() + slideInVertically { it },
+                    exit = fadeOut() + slideOutVertically { it }
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                    BottomAppBar(
+                        modifier = Modifier.height(65.dp),
+                        containerColor = Color.Transparent
                     ) {
-                        NavigationItem("Home", navController, R.drawable.home, "home", Color(0xFF4C60A9))
-                        NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen")
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            NavigationItem(
+                                "Home",
+                                navController,
+                                R.drawable.home,
+                                "home",
+                                Color(0xFF4C60A9)
+                            )
+                            NavigationItem(
+                                "Attendance",
+                                navController,
+                                R.drawable.clock,
+                                "attendance_screen"
+                            )
+                        }
                     }
                 }
             }
-        }
-    ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                item {
-                    InfoCard(R.drawable.calendar, currentDate) {
-                        Text("Have a Nice Day!", modifier = Modifier.fillMaxWidth())
+        ) { innerPadding ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    item {
+                        InfoCard(R.drawable.calendar, currentDate) {
+                            Text("Have a Nice Day!", modifier = Modifier.fillMaxWidth())
+                        }
                     }
-                }
-                item {
-                    InfoCard(R.drawable.clock, "Time Clock") {
-                        Text(formatElapsedTime(elapsedTime), modifier = Modifier.fillMaxWidth())
+                    item {
+                        InfoCard(R.drawable.clock, "Time Clock") {
+                            Text(formatElapsedTime(elapsedTime), modifier = Modifier.fillMaxWidth())
+                        }
                     }
-                }
-                item {
-                    // Attendance InfoCard
-                    InfoCard(null, "Attendance") {
-                        Column {
-                            AttendanceTableHeader()
-                            LazyColumn(
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                modifier = Modifier.fillMaxWidth().heightIn(max = 300.dp) // Set a max height
-                            ) {
-                                itemsIndexed(attendanceData) { index, attendance ->
-                                    AttendanceItem(attendance = attendance, index = index)
+                    item {
+                        // Attendance InfoCard
+                        InfoCard(null, "Attendance") {
+                            Column {
+                                AttendanceTableHeader()
+                                LazyColumn(
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    modifier = Modifier.fillMaxWidth()
+                                        .heightIn(max = 300.dp) // Set a max height
+                                ) {
+                                    itemsIndexed(attendanceData) { index, attendance ->
+                                        AttendanceItem(attendance = attendance, index = index)
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                item {
-                    InfoCard(null, "Tracked Hours") {
-                        TrackedHoursGraph()
+                    item {
+                        InfoCard(null, "Tracked Hours") {
+                            TrackedHoursGraph()
+                        }
                     }
                 }
-            }
 
-            AnimatedVisibility(
-                visible = isDrawerOpen,
-                enter = slideInHorizontally { it },
-                exit = slideOutHorizontally { it }
-            ) {
-                DrawerMenu(navController) { isDrawerOpen = false }
+//            AnimatedVisibility(
+//                visible = isDrawerOpen,
+//                enter = slideInHorizontally { it },
+//                exit = slideOutHorizontally { it }
+//            ) {
+//                DrawerMenu(navController) { isDrawerOpen = false }
+//            }
             }
         }
     }
