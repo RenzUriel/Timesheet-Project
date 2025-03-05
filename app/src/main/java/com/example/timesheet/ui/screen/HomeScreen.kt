@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClockIn: (Boolean) -> Unit) {
     val context = LocalContext.current
@@ -55,7 +55,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
             Box(modifier = Modifier.fillMaxHeight().width(300.dp).background(Color.LightGray)) {
                 DrawerMenu(navController) { scope.launch { drawerState.close() } }
             }
-        }
+        },
     ) {
         Scaffold(
 
@@ -99,7 +99,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     }
                 }
             }
-        ) { innerPadding ->
+        )   { innerPadding ->
             Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
                     modifier = Modifier
@@ -142,14 +142,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                         }
                     }
                 }
-
-//            AnimatedVisibility(
-//                visible = isDrawerOpen,
-//                enter = slideInHorizontally { it },
-//                exit = slideOutHorizontally { it }
-//            ) {
-//                DrawerMenu(navController) { isDrawerOpen = false }
-//            }
             }
         }
     }
