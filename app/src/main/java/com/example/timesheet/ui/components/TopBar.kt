@@ -23,6 +23,7 @@ fun TopBar(navController: NavController, onMenuClick: () -> Unit) {
             IconButton(onClick = onMenuClick) {
                 Icon(Icons.Filled.Menu, contentDescription = "Menu")
             }
-        }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFFF6F6F6))
     )
 }

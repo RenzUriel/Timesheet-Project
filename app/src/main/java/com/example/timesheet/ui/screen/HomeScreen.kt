@@ -84,6 +84,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
         }
     ) {
         Scaffold(
+            containerColor = Color(0xFFF6F6F6),
             floatingActionButton = {
                 ClockInOutButton(
                     isClockedIn = isClockedIn,
@@ -156,14 +157,11 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     }
                     item {
                         InfoCard(R.drawable.people, "Attendance") {
-                            AttendanceTableHeader()
-
+                            AttendanceTableHeader(textAlign = TextAlign.Start)
                         }
                     }
                     item {
-                        InfoCard(null, "Tracked Hours") {
-                            TrackedHoursGraph()
-                        }
+                        InfoCard(null, "Tracked Hours") {TrackedHoursGraph()}
                     }
                 }
             }
@@ -179,7 +177,8 @@ fun InfoCard(
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+//        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 5.dp)
