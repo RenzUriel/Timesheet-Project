@@ -3,11 +3,18 @@ package com.example.timesheet.features
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -32,6 +39,12 @@ fun ClockInOutButton(
     var showDialog by remember { mutableStateOf(false) }
     var clockTime by remember { mutableStateOf("") }
     var startTime by remember { mutableStateOf(getStoredStartTime(sharedPreferences)) }
+
+    val rotationAngle by animateFloatAsState(
+        targetValue = if (isClockedIn) 360f else 0f,
+        animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+        label = "Rotate Animation"
+    )
 
     LaunchedEffect(isClockedIn) {
         if (isClockedIn) {
@@ -61,6 +74,8 @@ fun ClockInOutButton(
                 Toast.makeText(context, "Clocked-In at $clockTime", Toast.LENGTH_SHORT).show()
             }
         },
+        modifier = Modifier.rotate(rotationAngle), // Apply rotate animation
+        shape = CircleShape,
         containerColor = if (isClockedIn) Color(0xFF9A3636) else Color(0xFF499A36)
     ) {
         Row(
@@ -71,7 +86,7 @@ fun ClockInOutButton(
                 painter = painterResource(if (isClockedIn) R.drawable.stop_circle else R.drawable.play_circle),
                 contentDescription = if (isClockedIn) "Clock Out" else "Clock In",
                 tint = Color.White,
-                modifier = Modifier.size(30.dp) // Change the size as needed
+                modifier = Modifier.size(30.dp) // Icon size
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
@@ -104,6 +119,29 @@ fun ClockInOutButton(
         )
     }
 }
+
+@Composable
+fun TimerProgressBar(elapsedTime: Long, totalTime: Long = 600L, gradientSunset: Brush) {
+    val progress = remember(elapsedTime) { (elapsedTime.toFloat() / totalTime.toFloat()).coerceIn(0f, 1f) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .height(10.dp)
+            .clip(RoundedCornerShape(50))
+            .background(Color(0xFFB0BEC5)) // Track color (Gray)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(progress)
+                .height(10.dp)
+                .clip(RoundedCornerShape(50))
+                .background(brush = gradientSunset) // Use the provided gradient
+        )
+    }
+}
+
 
 private fun saveStartTime(sharedPreferences: SharedPreferences, time: Long) {
     sharedPreferences.edit().putLong("start_time", time).apply()

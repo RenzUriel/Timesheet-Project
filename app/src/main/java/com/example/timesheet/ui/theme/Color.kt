@@ -12,7 +12,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 val PrimaryBlue = Color(0xFF4C60A9)
 
-val gradientSunset = Brush.verticalGradient(
+val gradientSunset = Brush.horizontalGradient(
     colors = listOf(Color(0xFFFF7E5F), Color(0xFFFFA07A), Color(0xFFFFDAB9))
 )
 
@@ -25,7 +25,13 @@ val gradientPurplePink = Brush.verticalGradient(
 )
 
 val gradientSky = Brush.verticalGradient(
-    colors = listOf(Color(0xFF4C60A9), Color(0xFF50ABE7), Color(0xFF6CBDE9), Color(0xFF87CEEB), Color(0xFFBAE0F3))
+    colors = listOf(
+        Color(0xFF4C60A9),
+        Color(0xFF50ABE7),
+        Color(0xFF6CBDE9),
+        Color(0xFF87CEEB),
+        Color(0xFFBAE0F3)
+    )
 )
 
 val gradientBlue = Brush.verticalGradient(

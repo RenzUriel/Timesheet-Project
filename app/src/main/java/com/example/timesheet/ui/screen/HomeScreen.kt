@@ -57,10 +57,12 @@ import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
+import com.example.timesheet.features.TimerProgressBar
 import com.example.timesheet.ui.components.AttendanceTableHeader
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
 import com.example.timesheet.ui.theme.gradientSky
+import com.example.timesheet.ui.theme.gradientSunset
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -202,14 +204,17 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                     )
 
                                     Text(
-                                        text = "Hours: ${formatElapsedTime(elapsedTime)}",
+                                        text = "Hours Worked: ${formatElapsedTime(elapsedTime)}",
                                         fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = Color.White
                                     )
                                 }
                             }
                         }
+                    }
+                    item {
+                        TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
                     }
                     item {
                         InfoCard(R.drawable.people, "Attendance") {

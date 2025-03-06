@@ -2,11 +2,12 @@ package com.example.timesheet.data
 
 import android.graphics.Paint
 import android.graphics.Typeface
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 
 @Composable
 fun TrackedHoursGraph() {
@@ -25,11 +27,26 @@ fun TrackedHoursGraph() {
     val barColor = Color(0xFF4C60A9)
     val gridColor = Color.Gray.copy(alpha = 0.3f)
 
+    val animatedWidths = remember {
+        hoursTracked.map { Animatable(0f) }
+    }
+
+
+    LaunchedEffect(Unit) {
+        animatedWidths.forEachIndexed { index, animatable ->
+            delay(index * 100L)
+            animatable.animateTo(
+                targetValue = hoursTracked[index],
+                animationSpec = tween(durationMillis = 550, easing = FastOutSlowInEasing)
+            )
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally // Ensures horizontal centering
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
             modifier = Modifier
@@ -71,8 +88,8 @@ fun TrackedHoursGraph() {
 
                 val yStep = (graphHeight - topPadding) / (hoursTracked.size + 1)
 
-                hoursTracked.forEachIndexed { index, hours ->
-                    val barWidth = hours * xScale
+                hoursTracked.forEachIndexed { index, _ ->
+                    val barWidth = animatedWidths[index].value * xScale
                     val yOffset = ((index + 1) * yStep) + topPadding
 
                     drawRoundRect(
@@ -82,15 +99,16 @@ fun TrackedHoursGraph() {
                         cornerRadius = CornerRadius(6f, 6f)
                     )
 
+                    // Draw day labels
                     drawContext.canvas.nativeCanvas.drawText(
                         daysOfWeek[index],
-                        + 25f,
+                        25f,
                         yOffset + 10f,
                         textPaint
                     )
 
-                    val hoursInt = hours.toInt()
-                    val minutes = ((hours - hoursInt) * 60).toInt()
+                    val hoursInt = hoursTracked[index].toInt()
+                    val minutes = ((hoursTracked[index] - hoursInt) * 60).toInt()
                     val timeText = String.format("%dh %02dm", hoursInt, minutes)
                     val textWidth = textPaint.measureText(timeText)
                     val textX = graphWidth - textWidth + 15f
