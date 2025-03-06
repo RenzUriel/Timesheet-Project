@@ -54,6 +54,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
         }
     ) {
     Scaffold(
+        containerColor = Color(0xFFF6F6F6),
         floatingActionButton = {
             ClockInOutButton(
                 isClockedIn = isClockedIn,
