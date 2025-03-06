@@ -23,6 +23,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
+import com.example.timesheet.ui.components.InputField
+import com.example.timesheet.ui.components.StandardButton
 
 @Composable
 fun TimeSheetLoginScreen(navController: NavController) {
@@ -32,9 +34,7 @@ fun TimeSheetLoginScreen(navController: NavController) {
     val context = LocalContext.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
+        modifier = Modifier.fillMaxSize().padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -54,9 +54,9 @@ fun TimeSheetLoginScreen(navController: NavController) {
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
+        Spacer(modifier = Modifier.height(30.dp))
         InputField(label = "Email", value = email, onValueChange = { email = it }, imeAction = ImeAction.Next)
-
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         InputField(
             label = "Password",
@@ -68,20 +68,19 @@ fun TimeSheetLoginScreen(navController: NavController) {
             imeAction = ImeAction.Done
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = "Forgot Password?",
             textAlign = TextAlign.End,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { navController.navigate("forgot") },
+            modifier = Modifier.fillMaxWidth().clickable { navController.navigate("forgot") },
             color = Color(0xFF4C60A9)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(50.dp))
 
-        Button(
+        StandardButton(
+            text = "Login",
             onClick = {
                 if (email.isNotEmpty() && password.isNotEmpty()) {
                     Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
@@ -89,68 +88,23 @@ fun TimeSheetLoginScreen(navController: NavController) {
                 } else {
                     Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
                 }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C50A9))
-        ) {
-            Text("Login", color = Color.White)
-        }
+            }
+        )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "Create a new account",
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.clickable { navController.navigate("signup") },
-            color = Color(0xFF4C60A9),
+            modifier = Modifier.clickable {navController.navigate("signup")},
             style = MaterialTheme.typography.bodySmall
         )
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
+
+    Box(modifier = Modifier.fillMaxSize().padding(20.dp),contentAlignment = Alignment.BottomCenter) {
         Text("© 2025 Jairosoft", color = Color(0xFF4C60A9), textAlign = TextAlign.Center)
     }
-}
-
-@Composable
-fun InputField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    isPassword: Boolean = false,
-    passwordVisible: Boolean = false,
-    onVisibilityToggle: (() -> Unit)? = null,
-    imeAction: ImeAction
-) {
-    Text(
-        text = label,
-        style = MaterialTheme.typography.labelLarge,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.fillMaxWidth()
-    )
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text("Enter $label") },
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = imeAction),
-        modifier = Modifier.fillMaxWidth(),
-        visualTransformation = if (isPassword && !passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-        trailingIcon = if (isPassword && onVisibilityToggle != null) {
-            {
-                val icon = if (passwordVisible) R.drawable.visibility else R.drawable.visibilityoff
-                Icon(
-                    painter = painterResource(id = icon),
-                    contentDescription = if (passwordVisible) "Hide password" else "Show password",
-                    modifier = Modifier.clickable { onVisibilityToggle() }
-                )
-            }
-        } else null
-    )
 }
 
 @Preview(showBackground = true)

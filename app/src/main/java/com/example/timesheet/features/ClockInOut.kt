@@ -70,7 +70,8 @@ fun ClockInOutButton(
             Icon(
                 painter = painterResource(if (isClockedIn) R.drawable.stop_circle else R.drawable.play_circle),
                 contentDescription = if (isClockedIn) "Clock Out" else "Clock In",
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier.size(30.dp) // Change the size as needed
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(

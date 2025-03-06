@@ -100,7 +100,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
                 item {
-                    Text("Generate Reports", modifier = Modifier.padding(bottom = 25.dp))
+                    Text("Generate Reports", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
                 }
 
                 item {
@@ -144,7 +144,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                                     modifier = Modifier
                                         .sizeIn(minWidth = 80.dp, minHeight = 28.dp)
                                         .padding(2.dp),
-                                    shape = RoundedCornerShape(8.dp),
+                                    shape = RoundedCornerShape(60.dp),
                                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C60A9))
                                 ) {
                                     Text("Download Report", color = Color.White, fontSize = 10.sp)

@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.example.timesheet.data.AttendanceSheetData
 
 @Composable
-fun AttendanceTableHeader(){
+fun AttendanceTableHeader(textAlign: TextAlign = TextAlign.Center) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp, top = 20.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -27,22 +27,22 @@ fun AttendanceTableHeader(){
         Text(
             text = "Date",
             modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center
+            textAlign = textAlign
         )
         Text(
             text = "Time In",
             modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center
+            textAlign = textAlign
         )
         Text(
             text = "Time Out",
             modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center
+            textAlign = textAlign
         )
         Text(
             text = "Location",
             modifier = Modifier.weight(1f),
-            textAlign = TextAlign.Center
+            textAlign = textAlign
         )
 
 

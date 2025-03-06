@@ -35,13 +35,13 @@ fun TrackedHoursGraph() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(270.dp)
-                .align(Alignment.CenterHorizontally) // Center the graph horizontally
+                .align(Alignment.CenterHorizontally)
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val graphWidth = size.width
                 val graphHeight = size.height - 40.dp.toPx()
-                val leftPadding = 40.dp.toPx()  // Reduced left padding to allow more grid space
-                val rightPadding = 40.dp.toPx() // Reduced right padding for a wider graph
+                val leftPadding = 40.dp.toPx()
+                val rightPadding = 40.dp.toPx()
                 val xScale = (graphWidth - leftPadding - rightPadding) / maxHours
                 val topPadding = 40f
 
@@ -51,11 +51,9 @@ fun TrackedHoursGraph() {
                     typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                 }
 
-                // Draw hour labels and vertical gridlines
-                for (hour in 0..10 step 2) { // Step increased for more evenly spaced gridlines
+                for (hour in 0..10 step 2) {
                     val xPos = leftPadding + (hour * xScale)
 
-                    // Draw hour labels at the top
                     drawContext.canvas.nativeCanvas.drawText(
                         "${hour}h",
                         xPos - textPaint.measureText("${hour}h") / 2,
@@ -63,7 +61,6 @@ fun TrackedHoursGraph() {
                         textPaint
                     )
 
-                    // Draw vertical gridlines (wider grid effect)
                     drawLine(
                         color = gridColor,
                         start = Offset(xPos, topPadding + 10.dp.toPx()),
@@ -74,7 +71,6 @@ fun TrackedHoursGraph() {
 
                 val yStep = (graphHeight - topPadding) / (hoursTracked.size + 1)
 
-                // Draw bars and labels
                 hoursTracked.forEachIndexed { index, hours ->
                     val barWidth = hours * xScale
                     val yOffset = ((index + 1) * yStep) + topPadding
@@ -86,7 +82,6 @@ fun TrackedHoursGraph() {
                         cornerRadius = CornerRadius(6f, 6f)
                     )
 
-                    // Draw day labels on the left
                     drawContext.canvas.nativeCanvas.drawText(
                         daysOfWeek[index],
                         + 25f,
@@ -94,12 +89,11 @@ fun TrackedHoursGraph() {
                         textPaint
                     )
 
-                    // Format and draw hours worked text
                     val hoursInt = hours.toInt()
                     val minutes = ((hours - hoursInt) * 60).toInt()
                     val timeText = String.format("%dh %02dm", hoursInt, minutes)
                     val textWidth = textPaint.measureText(timeText)
-                    val textX = graphWidth - textWidth + 15f  // Adjusted to fit wider grid
+                    val textX = graphWidth - textWidth + 15f
 
                     drawContext.canvas.nativeCanvas.drawText(
                         timeText,
@@ -109,7 +103,6 @@ fun TrackedHoursGraph() {
                     )
                 }
 
-                // Draw graph boundary (now wider)
                 drawRect(
                     color = gridColor,
                     topLeft = Offset(leftPadding, topPadding + 10.dp.toPx()),

@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,6 +41,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -57,8 +59,11 @@ import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.ui.components.AttendanceTableHeader
 import com.example.timesheet.ui.components.TopBar
+import com.example.timesheet.ui.theme.gradientDayLight
+import com.example.timesheet.ui.theme.gradientSky
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -67,14 +72,18 @@ import java.util.Locale
 fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClockIn: (Boolean) -> Unit) {
     val context = LocalContext.current
     val timeFormat = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
-    val currentDate =
-        remember { SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(Date()) }
+    val currentDate = Calendar.getInstance()
+    val month = remember { SimpleDateFormat("MMMM", Locale.getDefault()).format(currentDate.time) }
+    val day = remember { SimpleDateFormat("d", Locale.getDefault()).format(currentDate.time) }
+    val year = remember { SimpleDateFormat("yyyy", Locale.getDefault()).format(currentDate.time) }
     val attendanceData = getAttendanceData()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
 
     var isDrawerOpen by remember { mutableStateOf(false) }
     var elapsedTime by remember { mutableStateOf(0L) }
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -92,9 +101,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     updateElapsedTime = { elapsedTime = it }
                 )
             },
-
-                topBar = {TopBar(navController) { scope.launch { drawerState.open() } }},
-
+            topBar = { TopBar(navController) { scope.launch { drawerState.open() } } },
             bottomBar = {
                 AnimatedVisibility(
                     visible = !isDrawerOpen,
@@ -109,19 +116,8 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            NavigationItem(
-                                "Home",
-                                navController,
-                                R.drawable.home,
-                                "home",
-                                Color(0xFF4C60A9)
-                            )
-                            NavigationItem(
-                                "Attendance",
-                                navController,
-                                R.drawable.clock,
-                                "attendance_screen"
-                            )
+                            NavigationItem("Home", navController, R.drawable.home, "home", Color(0xFF4C60A9))
+                            NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen")
                         }
                     }
                 }
@@ -137,27 +133,87 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item {
-                        Text(
-                            "Dashboard",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF4C60A9)
-                        )
+                        Text("Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
                     }
                     item {
-                        InfoCard(R.drawable.calendar, currentDate) {
-                            Text("Have a Nice Day!", modifier = Modifier.fillMaxWidth())
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(gradientSky),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .fillMaxWidth()
+                                        .background(Color.White)
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(month, fontSize = 40.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                                        Text(day, fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                                    }
+                                }
+                            }
                         }
                     }
                     item {
-                        InfoCard(R.drawable.clock, "Time Clock") {
-                            Text(formatElapsedTime(elapsedTime), modifier = Modifier.fillMaxWidth())
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(gradientDayLight)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(5.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.sand_timer),
+                                    contentDescription = "Sand Timer",
+                                    modifier = Modifier
+                                        .size(80.dp)
+                                        .padding(end = 5.dp)
+                                )
+
+                                Column(
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Text(
+                                        text = timeFormat.format(Date()),
+                                        fontSize = 30.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White
+                                    )
+
+                                    Text(
+                                        text = "Hours: ${formatElapsedTime(elapsedTime)}",
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.White
+                                    )
+                                }
+                            }
                         }
                     }
                     item {
                         InfoCard(R.drawable.people, "Attendance") {
                             AttendanceTableHeader()
-
                         }
                     }
                     item {
@@ -170,6 +226,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
         }
     }
 }
+
 
 @Composable
 fun InfoCard(
