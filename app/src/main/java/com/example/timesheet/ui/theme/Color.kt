@@ -48,3 +48,13 @@ val gradientGalactic = Brush.verticalGradient(
         Color(0xFFD297E3)  // Faint Galactic Light
     )
 )
+
+val gradientSoftCyan = Brush.verticalGradient(
+    colors = listOf(
+        Color(0xFFE0F7FA), // Very Light Cyan (Near White)
+        Color(0xFFB2EBF2), // Soft Cyan Blue
+        Color(0xFF81D4FA), // Light Sky Cyan
+        Color(0xFF4FC3F7), // Medium Light Cyan
+        Color(0xFF29B6F6)  // Slightly Deeper Cyan
+    )
+)
