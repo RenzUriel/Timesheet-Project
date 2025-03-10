@@ -39,23 +39,23 @@ fun ForgotScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Forgot Password?",
-                fontSize = 24.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF4C60A9),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Start
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
                 text = "Enter your email and you will receive a confirmation email",
-                fontSize = 14.sp,
-                textAlign = TextAlign.Center
+                fontSize = 12.sp,
+                textAlign = TextAlign.Start
             )
 
             Spacer(modifier = Modifier.height(16.dp))

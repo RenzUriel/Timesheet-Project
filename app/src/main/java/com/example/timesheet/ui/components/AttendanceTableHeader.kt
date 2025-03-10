@@ -44,7 +44,5 @@ fun AttendanceTableHeader(textAlign: TextAlign = TextAlign.Center) {
             modifier = Modifier.weight(1f),
             textAlign = textAlign
         )
-
-
     }
 }

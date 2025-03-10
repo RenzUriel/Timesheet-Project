@@ -20,7 +20,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -95,6 +97,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
         }
     ) {
         Scaffold(
+            containerColor = Color(0xFFF6F6F6),
             floatingActionButton = {
                 ClockInOutButton(
                     isClockedIn = isClockedIn,
@@ -126,18 +129,18 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
             }
         ) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize()) {
-                LazyColumn(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
-                        .padding(5.dp),
+                        .padding(5.dp).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    item {
-                        Text("Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
-                    }
-                    item {
+//                    item {
+//                        Text("Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
+//                    }
+
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -153,7 +156,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(12.dp))
+                                        .clip(RoundedCornerShape(16.dp))
                                         .fillMaxWidth()
                                         .background(Color.White)
                                         .padding(16.dp),
@@ -162,15 +165,14 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Text(month, fontSize = 40.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                                        Text(day, fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                                        Text(month.uppercase(), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(day, fontSize = 70.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                     }
                                 }
                             }
                         }
-                    }
-                    item {
+
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -182,50 +184,49 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(5.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .padding(top = 15.dp, bottom = 15.dp, start = 15.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start // Arrange items to the start
                             ) {
+                                // Sand Timer Icon
                                 Image(
                                     painter = painterResource(id = R.drawable.sand_timer),
                                     contentDescription = "Sand Timer",
                                     modifier = Modifier
-                                        .size(80.dp)
-                                        .padding(end = 5.dp)
+                                        .size(80.dp) // Adjust size of icon to balance the layout
+                                        .padding(end = 16.dp) // Space between the icon and the column
                                 )
 
+                                // Column to hold text
                                 Column(
-                                    modifier = Modifier.weight(1f)
+                                    modifier = Modifier.weight(1f) // Ensures the column takes the remaining space
                                 ) {
+                                    // Current Time Text
                                     Text(
                                         text = timeFormat.format(Date()),
-                                        fontSize = 30.sp,
+                                        fontSize = 35.sp, // Increase font size for better prominence
                                         fontWeight = FontWeight.Bold,
                                         color = Color.White
                                     )
 
+                                    // Elapsed Time Text
                                     Text(
-                                        text = "Hours Worked: ${formatElapsedTime(elapsedTime)}",
-                                        fontSize = 20.sp,
+                                        text = "HOURS WORKED: ${formatElapsedTime(elapsedTime)}",
+                                        fontSize = 14.sp, // Slightly larger than before for clarity
                                         fontWeight = FontWeight.SemiBold,
                                         color = Color.White
                                     )
                                 }
                             }
                         }
-                    }
-                    item {
+
+
                         TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
-                    }
-                    item {
-                        InfoCard(R.drawable.people, "Attendance") {
-                            AttendanceTableHeader()
-                        }
-                    }
-                    item {
+
                         InfoCard(null, "Tracked Hours") {
                             TrackedHoursGraph()
                         }
-                    }
+
                 }
             }
         }
@@ -254,7 +255,7 @@ fun InfoCard(
             horizontalAlignment = Alignment.Start
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically, // Align icon & title
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 iconRes?.let {
@@ -275,7 +276,7 @@ fun InfoCard(
             }
             Spacer(modifier = Modifier.height(4.dp))
             Row(
-                modifier = Modifier.padding(start = if (iconRes != null) 28.dp else 0.dp) // Indent content if icon exists
+                modifier = Modifier.padding(start = if (iconRes != null) 28.dp else 0.dp)
             ) {
                 content()
             }
