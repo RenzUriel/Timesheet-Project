@@ -27,7 +27,7 @@ data class AttendanceSheetData(
 
 @Composable
 fun AttendanceItem(attendance: AttendanceSheetData, index: Int) {
-    val backgroundColor = if (index % 2 == 0) Color(0xFF6A6ECF) else Color.Transparent
+    val backgroundColor = if (index % 2 == 0) Color(0xFF87CEEB) else Color.Transparent
 
     Row(
         modifier = Modifier

@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -60,7 +59,6 @@ import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.features.TimerProgressBar
-import com.example.timesheet.ui.components.AttendanceTableHeader
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
 import com.example.timesheet.ui.theme.gradientSky
@@ -172,54 +170,67 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                 }
                             }
                         }
-
-                        Box(
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(gradientDayLight)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
                             modifier = Modifier
-                                .padding(16.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(gradientDayLight)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
+                                .fillMaxWidth()
+                                .padding(vertical = 18.dp, horizontal = 18.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Row(
+
+                            Text(
+                                text = timeFormat.format(Date()).uppercase(),
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 15.dp, bottom = 15.dp, start = 15.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Start // Arrange items to the start
+                                    .width(3.dp)
+                                    .height(50.dp)
+                                    .background(Color.White.copy(alpha = 0.5f))
+                            )
+                            // Elapsed Time and Hours Worked
+                            Column(
+                                horizontalAlignment = Alignment.Start
                             ) {
-                                // Sand Timer Icon
-                                Image(
-                                    painter = painterResource(id = R.drawable.sand_timer),
-                                    contentDescription = "Sand Timer",
-                                    modifier = Modifier
-                                        .size(80.dp) // Adjust size of icon to balance the layout
-                                        .padding(end = 16.dp) // Space between the icon and the column
-                                )
-
-                                // Column to hold text
-                                Column(
-                                    modifier = Modifier.weight(1f) // Ensures the column takes the remaining space
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    // Current Time Text
-                                    Text(
-                                        text = timeFormat.format(Date()),
-                                        fontSize = 35.sp, // Increase font size for better prominence
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.White
+                                    // Sand Timer Icon
+                                    Image(
+                                        painter = painterResource(id = R.drawable.sand_timer),
+                                        contentDescription = "Sand Timer",
+                                        modifier = Modifier
+                                            .size(26.dp)
+                                            .padding(end = 4.dp)
                                     )
-
-                                    // Elapsed Time Text
+                                    // Elapsed Time
                                     Text(
-                                        text = "HOURS WORKED: ${formatElapsedTime(elapsedTime)}",
-                                        fontSize = 14.sp, // Slightly larger than before for clarity
+                                        text = "${formatElapsedTime(elapsedTime)}",
+                                        fontSize = 24.sp,
                                         fontWeight = FontWeight.SemiBold,
                                         color = Color.White
                                     )
                                 }
+                                // Hours Worked
+                                Text(
+                                    text = "HOURS WORKED",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
                             }
                         }
-
+                    }
 
                         TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
 
@@ -242,7 +253,7 @@ fun InfoCard(
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 5.dp)

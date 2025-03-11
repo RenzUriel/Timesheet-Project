@@ -35,7 +35,9 @@ val gradientSky = Brush.verticalGradient(
 )
 
 val gradientBlue = Brush.verticalGradient(
-    colors = listOf(Color(0xFF4C60A9), Color(0xFF7083C2), Color(0xFFA3B0DB))
+    colors = listOf(Color(0xFF4C60A9),
+        Color(0xFF7083C2),
+        Color(0xFFA3B0DB))
 )
 
 val gradientGalactic = Brush.verticalGradient(
