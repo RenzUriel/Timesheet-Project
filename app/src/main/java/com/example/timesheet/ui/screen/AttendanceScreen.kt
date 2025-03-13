@@ -151,16 +151,16 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                     }
 
 
-                    Box() {
-                        TextField(
-                            value = searchText,
-                            onValueChange = { searchText = it },
-                            label = { Text("Search") },
-                            colors = TextFieldDefaults.textFieldColors(containerColor = Color(0xFFDADCEC)),
-                            modifier = Modifier.fillMaxWidth(0.5f).height(56.dp).clip(RoundedCornerShape(10.dp)),
-                            trailingIcon = {Icon(imageVector = Icons.Default.Search,contentDescription = "Search Icon")}
-                        )
-                    }
+//                    Box() {
+//                        TextField(
+//                            value = searchText,
+//                            onValueChange = { searchText = it },
+//                            label = { Text("Search") },
+//                            colors = TextFieldDefaults.textFieldColors(containerColor = Color(0xFFDADCEC)),
+//                            modifier = Modifier.fillMaxWidth(0.5f).height(56.dp).clip(RoundedCornerShape(10.dp)),
+//                            trailingIcon = {Icon(imageVector = Icons.Default.Search,contentDescription = "Search Icon")}
+//                        )
+//                    }
 
                     Box() {
                         Card(
