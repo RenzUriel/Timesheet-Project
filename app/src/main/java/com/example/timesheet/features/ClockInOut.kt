@@ -125,8 +125,7 @@ fun TimerProgressBar(elapsedTime: Long, totalTime: Long = 600L, gradientSunset: 
     val progress = remember(elapsedTime) { (elapsedTime.toFloat() / totalTime.toFloat()).coerceIn(0f, 1f) }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
             .padding(16.dp)
             .height(10.dp)
             .clip(RoundedCornerShape(50))

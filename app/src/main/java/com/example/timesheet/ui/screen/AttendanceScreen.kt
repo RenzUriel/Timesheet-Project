@@ -130,23 +130,11 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                 val attendanceData = getAttendanceData()
 
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                        .padding(5.dp).verticalScroll(rememberScrollState()),
+                    modifier = Modifier.fillMaxSize().padding(innerPadding).padding(5.dp).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(Color.White),
 
-                    ){
-                        AttendanceAnalytics()
-                    }
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
@@ -156,14 +144,12 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                         TimesheetTable(data = TimesheetData.sampleData)
                     }
 
-                    Box() {
-                        Text(
-                            "Generate Reports",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(0xFF4C60A9)
-                        )
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp).clip(RoundedCornerShape(16.dp)).background(Color.White),
+                    ){
+                        AttendanceAnalytics()
                     }
+
 
                     Box() {
                         TextField(
@@ -171,16 +157,8 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                             onValueChange = { searchText = it },
                             label = { Text("Search") },
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color(0xFFDADCEC)),
-                            modifier = Modifier
-                                .fillMaxWidth(0.5f)
-                                .height(56.dp)
-                                .clip(RoundedCornerShape(10.dp)),
-                            trailingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "Search Icon"
-                                )
-                            }
+                            modifier = Modifier.fillMaxWidth(0.5f).height(56.dp).clip(RoundedCornerShape(10.dp)),
+                            trailingIcon = {Icon(imageVector = Icons.Default.Search,contentDescription = "Search Icon")}
                         )
                     }
 
@@ -194,50 +172,52 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    com.example.timesheet.ui.components.DateInputTextField(
-                                        value = fromInput,
-                                        onValueChange = { fromInput = it },
-                                        label = "From",
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                    com.example.timesheet.ui.components.DateInputTextField(
-                                        value = toInput,
-                                        onValueChange = { toInput = it },
-                                        label = "To",
-                                        modifier = Modifier.weight(1f)
-                                    )
+//                                    com.example.timesheet.ui.components.DateInputTextField(
+//                                        value = fromInput,
+//                                        onValueChange = { fromInput = it },
+//                                        label = "From",
+//                                        modifier = Modifier.weight(1f)
+//                                    )
+//                                    com.example.timesheet.ui.components.DateInputTextField(
+//                                        value = toInput,
+//                                        onValueChange = { toInput = it },
+//                                        label = "To",
+//                                        modifier = Modifier.weight(1f)
+//                                    )
 
-                                    Button(
-                                        onClick = { /* Implement Download Report Function */ },
-                                        modifier = Modifier
-                                            .sizeIn(minWidth = 80.dp, minHeight = 28.dp)
-                                            .padding(2.dp),
-                                        shape = RoundedCornerShape(60.dp),
-                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C60A9))
-                                    ) {
-                                        Text("Download Report", color = Color.White, fontSize = 10.sp)
-                                    }
+
+
+//                                    Button(
+//                                        onClick = { /* Implement Download Report Function */ },
+//                                        modifier = Modifier
+//                                            .sizeIn(minWidth = 80.dp, minHeight = 28.dp)
+//                                            .padding(2.dp),
+//                                        shape = RoundedCornerShape(60.dp),
+//                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C60A9))
+//                                    ) {
+//                                        Text("Download Report", color = Color.White, fontSize = 10.sp)
+//                                    }
                                 }
                             }
                         }
                     }
 
-                    Column {
-                        AttendanceTableHeader()
-                        attendanceData.forEachIndexed { index, attendance ->
-                            AttendanceItem(attendance, index)
-                        }
-                    }
-                    //Add here
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp)
-                    ) {
-                        PermanentDatePicker(onDateSelected = { selectedDate ->
-                            println("Selected Date: $selectedDate")
-                        })
-                    }
+//                    Column {
+//                        AttendanceTableHeader()
+//                        attendanceData.forEachIndexed { index, attendance ->
+//                            AttendanceItem(attendance, index)
+//                        }
+//                    }
+//                    //Add here
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxSize()
+//                            .padding(16.dp)
+//                    ) {
+//                        PermanentDatePicker(onDateSelected = { selectedDate ->
+//                            println("Selected Date: $selectedDate")
+//                        })
+//                    }
                 }
             }
         }
