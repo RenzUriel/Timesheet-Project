@@ -21,7 +21,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun TrackedHoursGraph() {
-    val hoursTracked = listOf(9.0f, 7.25f, 6.75f, 8.0f, 4.5f, 0f, 0f)
+    val hoursTracked = TimesheetData.getTrackedHours()
     val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
     val maxHours = 10f
     val barColor = Color(0xFF4C60A9)

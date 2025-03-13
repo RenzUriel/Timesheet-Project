@@ -56,10 +56,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
 import com.example.timesheet.data.AttendanceItem
 import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
-import com.example.timesheet.data.PermanentDatePicker
+import com.example.timesheet.data.TimesheetData
+import com.example.timesheet.data.TimesheetTable
 import com.example.timesheet.features.AttendanceAnalytics
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
+import com.example.timesheet.features.PermanentDatePicker
 import com.example.timesheet.ui.components.AttendanceTableHeader
 import com.example.timesheet.ui.components.TopBar
 import kotlinx.coroutines.launch
@@ -137,12 +139,21 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                 ) {
                     Box(
                         modifier = Modifier
+                            .fillMaxWidth()
                             .padding(16.dp)
                             .clip(RoundedCornerShape(16.dp))
                             .background(Color.White),
 
                     ){
                         AttendanceAnalytics()
+                    }
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White)
+                    ) {
+                        TimesheetTable(data = TimesheetData.sampleData)
                     }
 
                     Box() {
