@@ -74,23 +74,23 @@ fun ClockInOutButton(
                 Toast.makeText(context, "Clocked-In at $clockTime", Toast.LENGTH_SHORT).show()
             }
         },
-        modifier = Modifier.rotate(rotationAngle), // Apply rotate animation
-        shape = CircleShape,
+        modifier = Modifier.rotate(rotationAngle),
+        shape = RoundedCornerShape(15.dp),
         containerColor = if (isClockedIn) Color(0xFF9A3636) else Color(0xFF499A36)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             Icon(
                 painter = painterResource(if (isClockedIn) R.drawable.stop_circle else R.drawable.play_circle),
-                contentDescription = if (isClockedIn) "Clock Out" else "Clock In",
+                contentDescription = if (isClockedIn) "Clock-out" else "Clock-in",
                 tint = Color.White,
-                modifier = Modifier.size(30.dp) // Icon size
+                modifier = Modifier.size(30.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = if (isClockedIn) "Clock Out" else "Clock In",
+                text = if (isClockedIn) "Clock-out" else "Clock-in",
                 color = Color.White
             )
         }
@@ -125,8 +125,7 @@ fun TimerProgressBar(elapsedTime: Long, totalTime: Long = 600L, gradientSunset: 
     val progress = remember(elapsedTime) { (elapsedTime.toFloat() / totalTime.toFloat()).coerceIn(0f, 1f) }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
             .padding(16.dp)
             .height(10.dp)
             .clip(RoundedCornerShape(50))

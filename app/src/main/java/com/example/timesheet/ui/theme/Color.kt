@@ -35,7 +35,9 @@ val gradientSky = Brush.verticalGradient(
 )
 
 val gradientBlue = Brush.verticalGradient(
-    colors = listOf(Color(0xFF4C60A9), Color(0xFF7083C2), Color(0xFFA3B0DB))
+    colors = listOf(Color(0xFF4C60A9),
+        Color(0xFF7083C2),
+        Color(0xFFA3B0DB))
 )
 
 val gradientGalactic = Brush.verticalGradient(
@@ -46,5 +48,15 @@ val gradientGalactic = Brush.verticalGradient(
         Color(0xFF705DAD), // Soft Cosmic Purple
         Color(0xFFA06CC2), // Luminous Nebula Glow
         Color(0xFFD297E3)  // Faint Galactic Light
+    )
+)
+
+val gradientSoftCyan = Brush.verticalGradient(
+    colors = listOf(
+        Color(0xFFE0F7FA), // Very Light Cyan (Near White)
+        Color(0xFFB2EBF2), // Soft Cyan Blue
+        Color(0xFF81D4FA), // Light Sky Cyan
+        Color(0xFF4FC3F7), // Medium Light Cyan
+        Color(0xFF29B6F6)  // Slightly Deeper Cyan
     )
 )

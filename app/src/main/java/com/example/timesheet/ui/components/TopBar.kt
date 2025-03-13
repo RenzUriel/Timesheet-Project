@@ -25,8 +25,7 @@ fun TopBar(navController: NavController?, onMenuClick: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.jairosoft_logo),
+                Image(painter = painterResource(id = R.drawable.jairosoft_logo),
                     contentDescription = "Jairosoft Logo",
                     modifier = Modifier.size(50.dp)
                 )
@@ -37,9 +36,7 @@ fun TopBar(navController: NavController?, onMenuClick: () -> Unit) {
                 Icon(Icons.Filled.Menu, contentDescription = "Menu")
             }
         },
-        actions = {
-            Spacer(modifier = Modifier.width(48.dp)) // This balances the hamburger menu width
-        }
+        actions = {Spacer(modifier = Modifier.width(48.dp))}
     )
 }
 

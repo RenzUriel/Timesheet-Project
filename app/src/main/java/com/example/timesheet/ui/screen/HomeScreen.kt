@@ -19,8 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -58,7 +59,6 @@ import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.features.TimerProgressBar
-import com.example.timesheet.ui.components.AttendanceTableHeader
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
 import com.example.timesheet.ui.theme.gradientSky
@@ -95,6 +95,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
         }
     ) {
         Scaffold(
+            containerColor = Color(0xFFF6F6F6),
             floatingActionButton = {
                 ClockInOutButton(
                     isClockedIn = isClockedIn,
@@ -126,18 +127,18 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
             }
         ) { innerPadding ->
             Box(modifier = Modifier.fillMaxSize()) {
-                LazyColumn(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
-                        .padding(5.dp),
+                        .padding(5.dp).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    item {
-                        Text("Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
-                    }
-                    item {
+//                    item {
+//                        Text("Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
+//                    }
+
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -153,7 +154,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(12.dp))
+                                        .clip(RoundedCornerShape(16.dp))
                                         .fillMaxWidth()
                                         .background(Color.White)
                                         .padding(16.dp),
@@ -162,70 +163,81 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                     Column(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
-                                        Text(month, fontSize = 40.sp, fontWeight = FontWeight.Medium, color = Color.Black)
-                                        Text(day, fontSize = 48.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                                        Text(month.uppercase(), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(day, fontSize = 70.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                                     }
                                 }
                             }
                         }
-                    }
-                    item {
-                        Box(
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(gradientDayLight)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row(
                             modifier = Modifier
-                                .padding(16.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(gradientDayLight)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
+                                .fillMaxWidth()
+                                .padding(vertical = 18.dp, horizontal = 18.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Row(
+
+                            Text(
+                                text = timeFormat.format(Date()).uppercase(),
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.White
+                            )
+                            Box(
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(5.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .width(3.dp)
+                                    .height(50.dp)
+                                    .background(Color.White.copy(alpha = 0.5f))
+                            )
+                            // Elapsed Time and Hours Worked
+                            Column(
+                                horizontalAlignment = Alignment.Start
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.sand_timer),
-                                    contentDescription = "Sand Timer",
-                                    modifier = Modifier
-                                        .size(80.dp)
-                                        .padding(end = 5.dp)
-                                )
-
-                                Column(
-                                    modifier = Modifier.weight(1f)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
-                                        text = timeFormat.format(Date()),
-                                        fontSize = 30.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.White
+                                    // Sand Timer Icon
+                                    Image(
+                                        painter = painterResource(id = R.drawable.sand_timer),
+                                        contentDescription = "Sand Timer",
+                                        modifier = Modifier
+                                            .size(26.dp)
+                                            .padding(end = 4.dp)
                                     )
-
+                                    // Elapsed Time
                                     Text(
-                                        text = "Hours Worked: ${formatElapsedTime(elapsedTime)}",
-                                        fontSize = 20.sp,
+                                        text = "${formatElapsedTime(elapsedTime)}",
+                                        fontSize = 24.sp,
                                         fontWeight = FontWeight.SemiBold,
                                         color = Color.White
                                     )
                                 }
+                                // Hours Worked
+                                Text(
+                                    text = "HOURS WORKED",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Color.White
+                                )
                             }
                         }
                     }
-                    item {
+
                         TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
-                    }
-                    item {
-                        InfoCard(R.drawable.people, "Attendance") {
-                            AttendanceTableHeader()
-                        }
-                    }
-                    item {
+
                         InfoCard(null, "Tracked Hours") {
                             TrackedHoursGraph()
                         }
-                    }
+
                 }
             }
         }
@@ -241,7 +253,7 @@ fun InfoCard(
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 5.dp)
@@ -254,7 +266,7 @@ fun InfoCard(
             horizontalAlignment = Alignment.Start
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically, // Align icon & title
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 iconRes?.let {
@@ -275,7 +287,7 @@ fun InfoCard(
             }
             Spacer(modifier = Modifier.height(4.dp))
             Row(
-                modifier = Modifier.padding(start = if (iconRes != null) 28.dp else 0.dp) // Indent content if icon exists
+                modifier = Modifier.padding(start = if (iconRes != null) 28.dp else 0.dp)
             ) {
                 content()
             }
