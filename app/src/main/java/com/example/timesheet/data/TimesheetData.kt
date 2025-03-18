@@ -12,11 +12,13 @@ object TimesheetData {
     )
 
     val sampleData = listOf(
-        Entry("3", "08:00", "16:00", "Cabantian"),
-        Entry("4", "09:30", "18:00", "Matina"),
-        Entry("5", "07:45", "15:30", "Cabantian"),
-        Entry("6", "07:49", "17:05", "Buhangin"),
-        Entry("7", "07:53", "17:15", "Cabantian"),
+        Entry("10", "08:00", "16:00", "Cabantian"),
+        Entry("11", "09:30", "18:00", "Matina"),
+        Entry("12", "07:45", "15:30", "Cabantian"),
+        Entry("13", "07:49", "17:05", "Buhangin"),
+        Entry("14", "07:53", "17:15", "Cabantian"),
+        Entry("15", "00:00", "00:00", "---"),
+        Entry("16", "00:00", "00:00", "---"),
     )
 
     fun calculateHours(timeIn: String, timeOut: String): String {

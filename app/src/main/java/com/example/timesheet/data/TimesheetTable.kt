@@ -37,17 +37,13 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
 
     currentDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY) // Get the start of the week (Monday)
     val startOfWeek = currentDate.time
-    currentDate.add(Calendar.DAY_OF_WEEK, 6) // Get the end of the week (Sunday)
+    currentDate.add(Calendar.DAY_OF_WEEK, 6)
     val endOfWeek = currentDate.time
-
-    // Format the month and date range
     val monthFormat = SimpleDateFormat("MMMM", Locale.getDefault())
     val dateFormat = SimpleDateFormat("d", Locale.getDefault())
     val month = monthFormat.format(startOfWeek)
     val startDate = dateFormat.format(startOfWeek)
     val endDate = dateFormat.format(endOfWeek)
-
-    // Create the date range string
     val dateRange = "$month $startDate - $endDate"
     var expanded by remember { mutableStateOf(false) }
     val months = listOf("January", "February", "March", "April", "May", "June",
@@ -56,15 +52,15 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
 
     Column(modifier = Modifier.padding(10.dp).height(300.dp)) {
         Row(
-            verticalAlignment = Alignment.CenterVertically, // Align items vertically centered
-            modifier = Modifier.padding(10.dp) // Padding for the entire row
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(10.dp)
         ) {
             Text(
                 "Generate Report",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF4C60A9),
-                modifier = Modifier.weight(1f) // Allow text to take available space
+                modifier = Modifier.weight(1f)
             )
             Button(
                 onClick = { /* Implement Download Report Function */ },
@@ -76,7 +72,7 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
             ) {
                 Text("Download Report", color = Color.White, fontSize = 10.sp) // Adjust font size if needed
             }
-        } // hello test
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
@@ -84,7 +80,6 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
             IconButton(onClick = { weekOffset-- }) {
                 Text("<")
             }
-//            Text(dateRange, fontWeight = FontWeight.Bold)
 
             Box {
                 Button(
@@ -103,12 +98,12 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
                     modifier = Modifier.heightIn(max = 200.dp)
                 ) {
                     months.forEach { month ->
-                    DropdownMenuItem(
-                        text = { Text(month) },
-                        onClick = { expanded = false
-                        }
-                    )
-                }
+                        DropdownMenuItem(
+                            text = { Text(month) },
+                            onClick = { expanded = false
+                            }
+                        )
+                    }
 
                 }
             }

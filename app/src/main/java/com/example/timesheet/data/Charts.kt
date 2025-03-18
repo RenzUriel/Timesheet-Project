@@ -99,7 +99,6 @@ fun TrackedHoursGraph() {
                         cornerRadius = CornerRadius(6f, 6f)
                     )
 
-                    // Draw day labels
                     drawContext.canvas.nativeCanvas.drawText(
                         daysOfWeek[index],
                         25f,
