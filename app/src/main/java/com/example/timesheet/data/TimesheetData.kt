@@ -42,4 +42,22 @@ object TimesheetData {
         }
     }
 
+    fun calculateTotalWeeklyHours(): String {
+        val totalMinutes = sampleData.sumOf { entry ->
+            val calculatedTime = calculateHours(entry.timeIn, entry.timeOut)
+            val parts = calculatedTime.split("h", "m").map { it.trim() }
+
+            val hours = parts.getOrNull(0)?.toIntOrNull() ?: 0
+            val minutes = parts.getOrNull(1)?.toIntOrNull() ?: 0
+
+            (hours * 60) + minutes
+        }
+
+        val totalHours = totalMinutes / 60
+        val remainingMinutes = totalMinutes % 60
+
+        return String.format("%dh %02dm", totalHours, remainingMinutes)
+    }
+
+
 }

@@ -24,8 +24,8 @@ fun TrackedHoursGraph() {
     val hoursTracked = TimesheetData.getTrackedHours()
     val daysOfWeek = listOf("M", "T", "W", "T", "F", "S", "S")
     val maxHours = 10f
-    val barColor = Color(0xFF4C60A9)
-    val gridColor = Color.Gray.copy(alpha = 0.3f)
+    val barColor = Color(0xFF29B6F6)
+    val gridColor = Color.Gray.copy(alpha = 0.0f)
 
     val animatedWidths = remember {
         hoursTracked.map { Animatable(0f) }

@@ -113,12 +113,12 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
         Box(modifier = Modifier.fillMaxWidth().height(400.dp)) {
             Row(modifier = Modifier.horizontalScroll(horizontalScrollState)) {
                 Column (modifier = Modifier.fillMaxWidth().height(200.dp)) {
-                    Row { TableCell(" ", true, Modifier.width(80.dp).padding(2.dp)) }
-                    Row { TableCell("Date", true, Modifier.width(80.dp).padding(2.dp)) }
-                    Row { TableCell("Time-in", true, Modifier.width(80.dp).padding(2.dp)) }
-                    Row { TableCell("Time-out", true, Modifier.width(80.dp).padding(2.dp)) }
-                    Row { TableCell("Trkd.Hrs", true, Modifier.width(80.dp).padding(2.dp)) }
-                    Row { TableCell("Location", true, Modifier.width(80.dp).padding(2.dp)) }
+                    Row { TableCell(" ", true, Modifier.width(100.dp).padding(2.dp)) }
+                    Row { TableCell("Date", true, Modifier.width(100.dp).padding(2.dp)) }
+                    Row { TableCell("Time-in", true, Modifier.width(100.dp).padding(2.dp)) }
+                    Row { TableCell("Time-out", true, Modifier.width(100.dp).padding(2.dp)) }
+                    Row { TableCell("Tracked Hrs", true, Modifier.width(100.dp).padding(2.dp)) }
+                    Row { TableCell("Location", true, Modifier.width(100.dp).padding(2.dp)) }
                 }
 
                 Column (modifier = Modifier.fillMaxWidth().height(200.dp)) {

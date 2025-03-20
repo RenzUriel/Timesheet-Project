@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
 import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
+import com.example.timesheet.data.TimesheetData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
@@ -62,6 +63,7 @@ import com.example.timesheet.features.TimerProgressBar
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
 import com.example.timesheet.ui.theme.gradientSky
+import com.example.timesheet.ui.theme.gradientSoftCyan
 import com.example.timesheet.ui.theme.gradientSunset
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -135,10 +137,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-//                    item {
-//                        Text("Dashboard", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF4C60A9))
-//                    }
-
                         Box(
                             modifier = Modifier
                                 .padding(16.dp)
@@ -178,6 +176,8 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
+
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -232,70 +232,51 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                         }
                     }
 
+
                         TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.White)
+                            .fillMaxWidth()
+                    ) {
+                        Column {
+                            // Header
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(gradientSoftCyan)
+                                    .padding(20.dp)
+                            ) {
+                                Text(
+                                    text = "Tracked Hours",
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.align(Alignment.TopStart)
+                                )
+                                Text(
+                                    text = "${TimesheetData.calculateTotalWeeklyHours()} worked",
+                                    color = Color.White,
+                                    modifier = Modifier.align(Alignment.TopEnd)
+                                )
+                            }
 
-                        InfoCard(null, "Tracked Hours") {
                             TrackedHoursGraph()
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(6.dp)
+                                    .background(Color(0xFF29B6F6))
+                            )
                         }
-
+                    }
                 }
             }
         }
     }
 }
-
-
-@Composable
-fun InfoCard(
-    iconRes: Int?,
-    title: String,
-    content: @Composable () -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 5.dp)
-
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                iconRes?.let {
-                    Icon(
-                        painter = painterResource(id = it),
-                        contentDescription = "$title Icon",
-                        modifier = Modifier.size(20.dp),
-                        tint = Color(0xFF4C60A9)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Start
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Row(
-                modifier = Modifier.padding(start = if (iconRes != null) 28.dp else 0.dp)
-            ) {
-                content()
-            }
-        }
-    }
-}
-
-
 
 @Composable
 fun NavigationItem(label: String, navController: NavController, iconRes: Int, route: String, color: Color = Color.Gray, onClick: (() -> Unit)? = null) {
