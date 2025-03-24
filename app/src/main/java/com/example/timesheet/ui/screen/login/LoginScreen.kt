@@ -87,7 +87,6 @@ fun TimeSheetLoginScreen(navController: NavController) {
             text = "Login",
             onClick = {
                 if (email.isNotEmpty() && password.isNotEmpty()) {
-                    // Call login process in ViewModel
                     loginViewModel.login(
                         email = email,
                         password = password,
@@ -95,9 +94,7 @@ fun TimeSheetLoginScreen(navController: NavController) {
                             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
                             navController.navigate("home")
                         },
-                        onFailure = {
-                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-                        }
+                        onFailure = {Toast.makeText(context, it, Toast.LENGTH_SHORT).show()}
                     )
                 } else {
                     Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
