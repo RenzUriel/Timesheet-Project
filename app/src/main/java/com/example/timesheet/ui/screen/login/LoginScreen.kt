@@ -1,4 +1,4 @@
-package com.example.timesheet.ui.screen
+package com.example.timesheet.ui.screen.login
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -24,12 +24,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.timesheet.R
 import com.example.timesheet.ui.components.InputField
 import com.example.timesheet.ui.components.StandardButton
 
 @Composable
 fun TimeSheetLoginScreen(navController: NavController) {
+    val loginViewModel: LoginViewModel = viewModel()  // Get ViewModel instance
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -85,8 +87,18 @@ fun TimeSheetLoginScreen(navController: NavController) {
             text = "Login",
             onClick = {
                 if (email.isNotEmpty() && password.isNotEmpty()) {
-                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                    navController.navigate("home")
+                    // Call login process in ViewModel
+                    loginViewModel.login(
+                        email = email,
+                        password = password,
+                        onSuccess = {
+                            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                            navController.navigate("home")
+                        },
+                        onFailure = {
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 } else {
                     Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
                 }
@@ -98,13 +110,12 @@ fun TimeSheetLoginScreen(navController: NavController) {
             text = "Create a new account",
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
-            modifier = Modifier.clickable {navController.navigate("signup")},
+            modifier = Modifier.clickable { navController.navigate("signup") },
             style = MaterialTheme.typography.bodySmall
         )
     }
 
-
-    Box(modifier = Modifier.fillMaxSize().padding(20.dp),contentAlignment = Alignment.BottomCenter) {
+    Box(modifier = Modifier.fillMaxSize().padding(20.dp), contentAlignment = Alignment.BottomCenter) {
         Text("© 2025 Jairosoft", color = Color(0xFF4C60A9), textAlign = TextAlign.Center)
     }
 }

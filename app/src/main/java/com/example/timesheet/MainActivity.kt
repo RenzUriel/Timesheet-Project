@@ -8,10 +8,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.timesheet.ui.screen.ForgotScreen
-import com.example.timesheet.ui.screen.TimeSheetLoginScreen
 import com.example.timesheet.ui.screen.HomeScreen
 import com.example.timesheet.ui.screen.AttendanceScreen
 import com.example.timesheet.ui.screen.SignUpScreen
+import com.example.timesheet.ui.screen.login.TimeSheetLoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
