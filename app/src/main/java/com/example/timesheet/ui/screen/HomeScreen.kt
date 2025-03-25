@@ -43,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -62,7 +63,9 @@ import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.features.TimerProgressBar
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
+import com.example.timesheet.ui.theme.gradientNightLight
 import com.example.timesheet.ui.theme.gradientSky
+import com.example.timesheet.ui.theme.gradientSky2
 import com.example.timesheet.ui.theme.gradientSoftCyan
 import com.example.timesheet.ui.theme.gradientSunset
 import kotlinx.coroutines.launch
@@ -137,42 +140,42 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                        Box(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(gradientSky),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                modifier = Modifier.padding(16.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Box(
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .fillMaxWidth()
-                                        .background(Color.White)
-                                        .padding(16.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Column(
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(month.uppercase(), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                        Text(day, fontSize = 70.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                    }
-                                }
-                            }
-                        }
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(gradientDayLight)
+                            .background(gradientSky),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Box(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .fillMaxWidth()
+                                    .background(Color.White)
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(month.uppercase(), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                    Text(day, fontSize = 70.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                    Text(year, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                }
+                            }
+                        }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(getGradientForTime())
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
@@ -233,7 +236,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     }
 
 
-                        TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
+                    TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
@@ -277,6 +280,21 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
         }
     }
 }
+
+fun getGradientForTime(): Brush {
+    val now = java.util.Calendar.getInstance()
+    val hour = now.get(java.util.Calendar.HOUR_OF_DAY)
+    val minute = now.get(java.util.Calendar.MINUTE)
+
+    val totalMinutes = hour * 60 + minute
+
+    return when {
+        totalMinutes in (5 * 60 + 30)..(7 * 60 + 59) -> gradientDayLight  // 5:30 AM - 7:59 AM
+        totalMinutes in (8 * 60)..(17 * 60 + 59) -> gradientSky2          // 8:00 AM - 5:59 PM
+        else -> gradientNightLight                                        // 6:00 PM - 5:29 AM
+    }
+}
+
 
 @Composable
 fun NavigationItem(label: String, navController: NavController, iconRes: Int, route: String, color: Color = Color.Gray, onClick: (() -> Unit)? = null) {

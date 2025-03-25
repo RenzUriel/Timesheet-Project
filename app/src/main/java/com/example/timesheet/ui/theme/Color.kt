@@ -24,6 +24,15 @@ val gradientSunset = Brush.horizontalGradient(
 val gradientDayLight = Brush.horizontalGradient(
     colors = listOf(Color(0xFFFFAA00), Color(0xFFFFC300), Color(0xFFFFDD00))
 )
+val gradientNightLight = Brush.horizontalGradient(
+    colors = listOf(Color(0xFF0D1B2A), Color(0xFF1B263B), Color(0xFF415A77)) // Dark blue shades
+)
+val gradientSky2 = Brush.horizontalGradient(
+    colors = listOf(Color(0xFF50ABE7), Color(0xFF6CBDE9), Color(0xFF87CEEB),
+    )
+)
+
+
 val gradientSky = Brush.verticalGradient(
     colors = listOf(
         //Color(0xFF4C60A9),

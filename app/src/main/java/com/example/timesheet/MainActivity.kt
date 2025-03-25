@@ -11,6 +11,7 @@ import com.example.timesheet.ui.screen.ForgotScreen
 import com.example.timesheet.ui.screen.HomeScreen
 import com.example.timesheet.ui.screen.AttendanceScreen
 import com.example.timesheet.ui.screen.SignUpScreen
+import com.example.timesheet.ui.screen.PostLogScreen
 import com.example.timesheet.ui.screen.login.TimeSheetLoginScreen
 
 class MainActivity : ComponentActivity() {
@@ -27,6 +28,7 @@ class MainActivity : ComponentActivity() {
                 composable("home") { HomeScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }
                 composable("attendance_screen") { AttendanceScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }
                 composable("logout") { TimeSheetLoginScreen(navController) }
+                composable("postlogscreen") { PostLogScreen(navController) }
             }
 
             //test

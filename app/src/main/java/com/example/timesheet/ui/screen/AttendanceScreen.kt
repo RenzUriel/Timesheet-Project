@@ -127,7 +127,7 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                             .clip(RoundedCornerShape(16.dp))
                             .background(Color.White)
                     ) {
-                        TimesheetTable(data = TimesheetData.sampleData)
+                        TimesheetTable(data = TimesheetData.sampleData, navController = navController)
                     }
 
                     Box(
@@ -147,11 +147,11 @@ fun AttendanceScreen(navController: NavController, isClockedIn: Boolean, onToggl
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
 
+                                }
                             }
                         }
-                    }
 
-                   }
+                    }
                 }
             }
         }

@@ -26,16 +26,17 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.Locale
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun TimesheetTable(data: List<TimesheetData.Entry>) {
+fun TimesheetTable(data: List<TimesheetData.Entry>, navController: NavController) {
     val weekDays = listOf("M", "T", "W", "T", "F", "S", "S")
     val horizontalScrollState = rememberScrollState()
-    var weekOffset by remember { mutableStateOf(0) }  // State to track the current week offset
-    val currentDate = Calendar.getInstance() // Calculate the current date based on the week offset
-    currentDate.add(Calendar.WEEK_OF_YEAR, weekOffset) // Adjust the current date by the week offset
-
-    currentDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY) // Get the start of the week (Monday)
+    var weekOffset by remember { mutableStateOf(0) }
+    val currentDate = Calendar.getInstance()
+    currentDate.add(Calendar.WEEK_OF_YEAR, weekOffset)
+    currentDate.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
     val startOfWeek = currentDate.time
     currentDate.add(Calendar.DAY_OF_WEEK, 6)
     val endOfWeek = currentDate.time
@@ -48,6 +49,7 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
     var expanded by remember { mutableStateOf(false) }
     val months = listOf("January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December")
+
 
 
     Column(modifier = Modifier.padding(10.dp).height(300.dp)) {
@@ -63,14 +65,14 @@ fun TimesheetTable(data: List<TimesheetData.Entry>) {
                 modifier = Modifier.weight(1f)
             )
             Button(
-                onClick = { /* Implement Download Report Function */ },
+                onClick = { navController.navigate("postlogscreen") },
                 modifier = Modifier
                     .sizeIn(minWidth = 100.dp, minHeight = 35.dp) // Adjust width and height
-                    .padding(start = 8.dp), // Add padding to the start for spacing
+                    .padding(start = 8.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4C60A9))
             ) {
-                Text("Download Report", color = Color.White, fontSize = 10.sp) // Adjust font size if needed
+                Text("Log Report", color = Color.White, fontSize = 15.sp) // Adjust font size if needed
             }
         }
         Row(
@@ -181,5 +183,6 @@ fun ScrollIndicator(scrollState: ScrollState, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewTimesheetTable() {
-    TimesheetTable(data = TimesheetData.sampleData)
+    val fakeNavController = rememberNavController()
+    TimesheetTable(data = TimesheetData.sampleData, navController = fakeNavController)
 }
