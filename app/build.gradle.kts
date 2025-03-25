@@ -65,11 +65,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    // Retrofit (Networking)
+    // Retrofit
+    implementation(libs.okhttp)
+    implementation (libs.logging.interceptor)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.converter.gson)
-    implementation(libs.okhttp)
-    implementation (libs.logging.interceptor)
 }

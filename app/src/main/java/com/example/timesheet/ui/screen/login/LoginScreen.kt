@@ -31,7 +31,7 @@ import com.example.timesheet.ui.components.StandardButton
 
 @Composable
 fun TimeSheetLoginScreen(navController: NavController) {
-    val loginViewModel: LoginViewModel = viewModel()  // Get ViewModel instance
+    val loginViewModel: LoginViewModel = viewModel()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
