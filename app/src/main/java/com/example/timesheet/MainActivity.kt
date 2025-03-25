@@ -28,6 +28,8 @@ class MainActivity : ComponentActivity() {
                 composable("attendance_screen") { AttendanceScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }
                 composable("logout") { TimeSheetLoginScreen(navController) }
             }
+
+            //test
         }
     }
 }
