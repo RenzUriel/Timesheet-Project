@@ -14,6 +14,4 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): User
-
-
 }
