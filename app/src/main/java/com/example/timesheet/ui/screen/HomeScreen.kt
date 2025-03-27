@@ -23,13 +23,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -47,16 +44,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
-import com.example.timesheet.data.TimesheetData
-import com.example.timesheet.data.TrackedHoursGraph
+import com.example.timesheet.data.others.LocalAttendanceDataProvider.getAttendanceData
+import com.example.timesheet.data.others.TimesheetData
+import com.example.timesheet.data.others.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.features.TimerProgressBar
@@ -73,7 +69,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClockIn: (Boolean) -> Unit) {
+fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String, onToggleClockIn: (Boolean) -> Unit) {
     val context = LocalContext.current
     val timeFormat = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
     val currentDate = Calendar.getInstance()
@@ -122,12 +118,13 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             NavigationItem("Home", navController, R.drawable.home, "home", Color(0xFF4C60A9))
-                            NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen")
+                            NavigationItem("Attendance", navController, R.drawable.clock, "postlogscreen/${token}")
                         }
                     }
                 }
             }
         ) { innerPadding ->
+
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
@@ -148,7 +145,14 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                                 modifier = Modifier.padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
+//                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                                Text(
+                                    text = "Token: $token",  // ✅ Display the token here
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    modifier = Modifier.padding(16.dp)
+                                )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(
                                     modifier = Modifier
@@ -303,11 +307,3 @@ fun formatElapsedTime(seconds: Long): String {
     return String.format("%02d:%02d:%02d", hours, minutes, sec)
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewHomeScreen() {
-    val navController = rememberNavController()
-    var isClockedIn by remember { mutableStateOf(false) }
-
-    HomeScreen(navController, isClockedIn) { isClockedIn = !isClockedIn }
-}

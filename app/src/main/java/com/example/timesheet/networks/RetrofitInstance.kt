@@ -1,4 +1,4 @@
-package com.example.timesheet.api
+package com.example.timesheet.networks
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

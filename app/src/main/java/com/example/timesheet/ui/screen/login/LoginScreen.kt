@@ -1,5 +1,6 @@
 package com.example.timesheet.ui.screen.login
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -90,17 +91,21 @@ fun TimeSheetLoginScreen(navController: NavController) {
                     loginViewModel.login(
                         email = email,
                         password = password,
-                        onSuccess = {
-                            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                            navController.navigate("home")
+                        onSuccess = { token ->
+                            Log.e("LoginViewModel", "Login response status: Success")
+                            Toast.makeText(context, "Login Successful\nToken: $token", Toast.LENGTH_LONG).show()
+                            navController.navigate("home/$token")
                         },
-                        onFailure = {Toast.makeText(context, it, Toast.LENGTH_SHORT).show()}
+                        onFailure = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
                     )
                 } else {
                     Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
                 }
             }
         )
+
+
+
 
         Spacer(modifier = Modifier.height(20.dp))
         Text(
