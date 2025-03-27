@@ -1,4 +1,4 @@
-package com.example.timesheet.ui.screen
+package com.example.timesheet.ui.screen.attendance
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -22,11 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.data.TimesheetData
+import com.example.timesheet.ui.screen.NavigationItem
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,6 +38,7 @@ fun PostLogScreen(navController: NavController) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val isDrawerOpen by remember { derivedStateOf { drawerState.isOpen } }
+//    val viewModel: PostLogViewModel = viewModel()
 
     Scaffold(
         topBar = { TopBar(navController) { scope.launch { drawerState.open() } } },
@@ -84,7 +87,6 @@ fun PostLogScreen(navController: NavController) {
                 )
             }
 
-            // Table Header
             Row(
                 modifier = Modifier
                     .horizontalScroll(horizontalScrollState)

@@ -1,10 +1,13 @@
 package com.example.timesheet.api
 
 
-import com.example.timesheet.data.User
+import android.media.session.MediaSession.Token
+import com.example.timesheet.data.models.Logs
+import com.example.timesheet.data.models.User
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
@@ -17,9 +20,8 @@ interface ApiService {
     ): User
 
     @FormUrlEncoded
-    @GET
-    suspend fun logs(
-        @Field("_id") id: Int,
-        @Field("User_id") user_id: Int
-    )
+    @GET("logs")
+    suspend fun logsUser(
+        @Header("token")token: String
+    ): Logs
 }

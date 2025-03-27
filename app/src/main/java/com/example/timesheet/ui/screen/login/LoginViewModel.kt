@@ -4,17 +4,24 @@ package com.example.timesheet.ui.screen.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timesheet.data.User
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.timesheet.data.models.LogEntry
+import com.example.timesheet.data.models.User
+import com.example.timesheet.data.repository.LogsRepository
 import com.example.timesheet.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val userRepository: UserRepository = UserRepository(),
+    private val logsRepository: LogsRepository = LogsRepository(),
 ) : ViewModel() {
 
     private val _details = MutableStateFlow<User?>(null)
 
+    private val _logs = MutableStateFlow<List<LogEntry>>(emptyList())
+    val logs = _logs.asStateFlow()
     fun login(
         email: String,
         password: String,
@@ -41,6 +48,14 @@ class LoginViewModel(
             }
         }
     }
+
+
+//    private fun fetchLogs(authToken: String){
+//        viewModelScope.launch {
+//            val logsReponse = logsRepository.getLogsUser(authToken)
+//            _logs.value = logsReponse
+//        }
+//    }
 
 
 
