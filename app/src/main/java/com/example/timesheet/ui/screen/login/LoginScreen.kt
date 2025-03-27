@@ -92,19 +92,16 @@ fun TimeSheetLoginScreen(navController: NavController) {
                         password = password,
                         onSuccess = {
                             Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                            val authToken = loginViewModel.details.value?.token ?: ""
-                            if (authToken.isNotEmpty()) {
-                                navController.navigate("postlog?authToken=$authToken")
-                            }
+
+                            navController.navigate("home")
                         },
-                        onFailure = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+                        onFailure = {Toast.makeText(context, it, Toast.LENGTH_SHORT).show()}
                     )
                 } else {
                     Toast.makeText(context, "Please enter email and password", Toast.LENGTH_SHORT).show()
                 }
             }
         )
-
 
         Spacer(modifier = Modifier.height(20.dp))
         Text(

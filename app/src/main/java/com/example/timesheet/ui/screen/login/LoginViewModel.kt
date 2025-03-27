@@ -37,6 +37,7 @@ class LoginViewModel(
 
                 if (user.status == "success") {
                     _details.value = user
+                    fetchLogs(user.response.token)
                     onSuccess()
                 } else {
                     onFailure("Login failed: ${user.status}")
@@ -49,15 +50,15 @@ class LoginViewModel(
         }
     }
 
-
-//    private fun fetchLogs(authToken: String){
-//        viewModelScope.launch {
-//            val logsReponse = logsRepository.getLogsUser(authToken)
-//            _logs.value = logsReponse
-//        }
-//    }
-
-
-
+    private fun fetchLogs(token: String) {
+        viewModelScope.launch {
+            try {
+                val logsResponse = logsRepository.getLogsUser(token)
+                _logs.value = logsResponse
+            } catch (e: Exception) {
+                Log.d("error","error")
+            }
+        }
+    }
 
 }
