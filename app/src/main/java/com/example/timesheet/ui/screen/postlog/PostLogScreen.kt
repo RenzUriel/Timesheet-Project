@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,7 +69,7 @@ fun PostLogScreen(navController: NavController, token: String) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        NavigationItem("Home", navController, R.drawable.home, "home")
+                        NavigationItem("Home", navController, R.drawable.home, "home/${token}", Color(0xFF4C60A9))
                         NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen", Color(0xFF4C60A9))
                     }
                 }
@@ -112,27 +113,38 @@ fun PostLogScreen(navController: NavController, token: String) {
                 TableCell(text = "Time-In", isHeader = true)
                 TableCell(text = "Time-Out", isHeader = true)
                 TableCell(text = "Tracked Hours", isHeader = true)
-                TableCell(text = "Location", isHeader = true)
+//                TableCell(text = "Location", isHeader = true)
             }
 
             // Table Rows - Logs
             if (logs.isEmpty()) {
-                Text("No logs available.", modifier = Modifier.fillMaxWidth(), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = "No logs available.",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    style = MaterialTheme.typography.bodyMedium
+                )
             } else {
                 logs.forEach { log ->
-                    Row(modifier = Modifier.horizontalScroll(horizontalScrollState)) {
-                        TableCell(text = log.id ?: "N/A")
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                            .horizontalScroll(horizontalScrollState)
+                    ) {
+                        TableCell(text = log.id?.toString()?.takeLast(4) ?: "N/A")
                         TableCell(text = log.attendanceStatus ?: "N/A")
                         TableCell(text = formatDate(log.timeIn) ?: "N/A")
                         TableCell(text = formatDate(log.timeOut) ?: "N/A")
-                        TableCell(text = log.totalHours?.toString() ?: "N/A")  // Display total hours
-                        // TableCell(text = log.location ?: "N/A")
+                        TableCell(text = log.totalHours100?.toString() ?: "N/A")
                     }
                 }
             }
         }
     }
 }
+
 fun formatDate(timestamp: Long?): String? {
     return if (timestamp != null) {
         val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
@@ -143,12 +155,12 @@ fun formatDate(timestamp: Long?): String? {
     }
 }
 
-
 @Composable
 fun TableCell(text: String, isHeader: Boolean = false) {
     Box(
         modifier = Modifier
-            .width(120.dp)
+//            .weight(1f) // Ensure all cells have equal width in the row
+            .height(48.dp) // Consistent height for all cells
             .padding(4.dp)
             .background(if (isHeader) Color.DarkGray else Color.LightGray, RoundedCornerShape(4.dp))
             .padding(8.dp)
@@ -157,19 +169,13 @@ fun TableCell(text: String, isHeader: Boolean = false) {
             text = text,
             fontSize = 14.sp,
             fontWeight = if (isHeader) FontWeight.Bold else FontWeight.Normal,
-            color = if (isHeader) Color.White else Color.Black
+            color = if (isHeader) Color.White else Color.Black,
+            maxLines = 1, // To avoid text overflow in small cells
+            overflow = TextOverflow.Ellipsis // Truncate long text if necessary
         )
     }
 }
 
-fun calculateTrackedHours(timeIn: Long?, timeOut: Long?): String {
-    return if (timeIn != null && timeOut != null) {
-        val hoursWorked = (timeOut - timeIn) / 1000 / 3600 // Assuming timeIn and timeOut are in milliseconds
-        "$hoursWorked hrs"
-    } else {
-        "N/A"
-    }
-}
 
 @Preview(showBackground = true)
 @Composable

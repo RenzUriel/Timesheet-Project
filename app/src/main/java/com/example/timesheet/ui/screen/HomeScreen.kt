@@ -117,7 +117,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            NavigationItem("Home", navController, R.drawable.home, "home", Color(0xFF4C60A9))
+                            NavigationItem("Home", navController, R.drawable.home, "home/${token}", Color(0xFF4C60A9))
                             NavigationItem("Attendance", navController, R.drawable.clock, "postlogscreen/${token}")
                         }
                     }
