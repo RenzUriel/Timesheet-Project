@@ -1,4 +1,4 @@
-package com.example.timesheet.ui.screen
+package com.example.timesheet.ui.screen.others
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -23,13 +23,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -48,16 +45,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
-import com.example.timesheet.data.TimesheetData
-import com.example.timesheet.data.TrackedHoursGraph
+import com.example.timesheet.data.others.LocalAttendanceDataProvider.getAttendanceData
+import com.example.timesheet.data.others.TimesheetData
+import com.example.timesheet.data.others.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.features.TimerProgressBar
@@ -125,7 +121,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             NavigationItem("Home", navController, R.drawable.home, "home", Color(0xFF4C60A9))
-                            NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen")
+                            NavigationItem("postlogscreen", navController, R.drawable.clock, "postlogscreen")
                         }
                     }
                 }

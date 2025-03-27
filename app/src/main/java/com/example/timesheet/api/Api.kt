@@ -19,7 +19,6 @@ interface ApiService {
         @Field("password") password: String
     ): User
 
-    @FormUrlEncoded
     @GET("logs")
     suspend fun logsUser(
         @Header("token")token: String

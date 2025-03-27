@@ -24,3 +24,10 @@ data class LogEntry(
     @SerializedName("Date") val date: Long,
     @SerializedName("Created By") val createdBy: String
 )
+
+
+data class ErrorResponse(
+    val statusCode: Int?,
+    val reason: String?,
+    val message: String?
+)

@@ -27,18 +27,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
 import com.example.timesheet.ui.components.TopBar
-import com.example.timesheet.data.TimesheetData
-import com.example.timesheet.ui.screen.NavigationItem
+import com.example.timesheet.data.others.TimesheetData
+import com.example.timesheet.ui.screen.login.LoginViewModel
+import com.example.timesheet.ui.screen.others.NavigationItem
 import kotlinx.coroutines.launch
 
 @Composable
 fun PostLogScreen(navController: NavController) {
+    val loginViewModel: LoginViewModel = viewModel()
+    val logs by loginViewModel.logs.collectAsState() // Observe logs
     val horizontalScrollState = rememberScrollState()
     val verticalScrollState = rememberScrollState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val isDrawerOpen by remember { derivedStateOf { drawerState.isOpen } }
-//    val viewModel: PostLogViewModel = viewModel()
 
     Scaffold(
         topBar = { TopBar(navController) { scope.launch { drawerState.open() } } },
@@ -57,7 +59,7 @@ fun PostLogScreen(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         NavigationItem("Home", navController, R.drawable.home, "home")
-                        NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen", Color(0xFF4C60A9))
+                        NavigationItem("Attendance", navController, R.drawable.clock, "postlogscreen", Color(0xFF4C60A9))
                     }
                 }
             }
@@ -100,23 +102,19 @@ fun PostLogScreen(navController: NavController) {
                 TableCell(text = "Location", isHeader = true)
             }
 
-            Column {
-                TimesheetData.sampleData
-                    .filter { it.timeIn != "00:00" || it.timeOut != "00:00" }
-                    .forEach { entry ->
-                        Row(modifier = Modifier.horizontalScroll(horizontalScrollState)) {
-                            TableCell(text = entry.date)
-                            TableCell(text = entry.timeIn)
-                            TableCell(text = entry.timeOut)
-                            TableCell(text = TimesheetData.calculateHours(entry.timeIn, entry.timeOut))
-                            TableCell(text = entry.location)
-                        }
-                    }
+            // Display the fetched logs here
+            logs.forEach { entry ->
+                Row(modifier = Modifier.horizontalScroll(horizontalScrollState)) {
+                    TableCell(text = entry.date.toString())  // Format the date as needed
+                    TableCell(text = entry.timeIn.toString()) // Format the time as needed
+                    TableCell(text = entry.timeOut.toString()) // Format the time as needed
+                    TableCell(text = entry.totalHours100.toString()) // Assuming this represents hours
+//                    TableCell(text = entry.location) // Assuming there's a location field
+                }
             }
         }
     }
 }
-
 @Composable
 fun TableCell(text: String, isHeader: Boolean = false) {
     Box(

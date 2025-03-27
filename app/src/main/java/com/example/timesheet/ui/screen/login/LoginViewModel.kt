@@ -12,16 +12,16 @@ import com.example.timesheet.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-
+import retrofit2.HttpException
 class LoginViewModel(
     private val userRepository: UserRepository = UserRepository(),
     private val logsRepository: LogsRepository = LogsRepository(),
 ) : ViewModel() {
 
     private val _details = MutableStateFlow<User?>(null)
-
     private val _logs = MutableStateFlow<List<LogEntry>>(emptyList())
     val logs = _logs.asStateFlow()
+
     fun login(
         email: String,
         password: String,
@@ -30,14 +30,18 @@ class LoginViewModel(
     ) {
         viewModelScope.launch {
             try {
+                // Attempt to login and get the user response
                 val user = userRepository.loginUser(email, password)
 
                 Log.d("LoginViewModel", "Login response status: ${user.status}")
                 Log.d("LoginViewModel", "Login response token: ${user.response.token}")
 
                 if (user.status == "success") {
+                    // Store the user details and token
                     _details.value = user
-                    fetchLogs(user.response.token)
+                    val token = user.token // Fetch the token from user response
+                    fetchLogs(token) // Pass the token to fetch logs
+
                     onSuccess()
                 } else {
                     onFailure("Login failed: ${user.status}")
@@ -53,12 +57,16 @@ class LoginViewModel(
     private fun fetchLogs(token: String) {
         viewModelScope.launch {
             try {
+                // Pass the token to the API to fetch logs
                 val logsResponse = logsRepository.getLogsUser(token)
                 _logs.value = logsResponse
             } catch (e: Exception) {
-                Log.d("error","error")
+                if (e is HttpException && e.code() == 401) {
+                    Log.e("LoginViewModel", "Unauthorized - Token might be invalid or expired")
+                    // Handle re-login or token refresh here
+                }
+                Log.d("error", "Failed to fetch logs: ${e.message}")
             }
         }
     }
-
 }
