@@ -4,8 +4,8 @@ package com.example.timesheet.data.repository
 import android.util.Log
 import com.example.timesheet.networks.RetrofitInstance
 import com.example.timesheet.networks.RetrofitInstance.api
-import com.example.timesheet.data.User
-import com.example.timesheet.data.UserLogs
+import com.example.timesheet.data.data_class.User
+import com.example.timesheet.data.data_class.UserLogs
 
 class UserRepository {
 

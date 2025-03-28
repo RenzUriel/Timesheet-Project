@@ -1,4 +1,4 @@
-package com.example.timesheet.data.others
+package com.example.timesheet.data
 
 object LocalAttendanceDataProvider {
     val defaultAttendance = getAttendanceData()[0]

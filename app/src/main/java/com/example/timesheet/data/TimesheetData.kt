@@ -1,4 +1,4 @@
-package com.example.timesheet.data.others
+package com.example.timesheet.data
 
 import java.util.Locale
 import java.text.SimpleDateFormat

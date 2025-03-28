@@ -4,8 +4,8 @@ package com.example.timesheet.ui.screen.login
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timesheet.data.User
-import com.example.timesheet.data.UserLogs
+import com.example.timesheet.data.data_class.User
+import com.example.timesheet.data.data_class.UserLogs
 import com.example.timesheet.data.repository.LogsRepository
 import com.example.timesheet.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow

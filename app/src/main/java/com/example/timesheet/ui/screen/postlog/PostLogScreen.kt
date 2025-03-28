@@ -1,6 +1,5 @@
 package com.example.timesheet.ui.screen.postlog
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -28,7 +27,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.data.UserLogs
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.screen.NavigationItem
 import kotlinx.coroutines.launch
@@ -54,6 +52,7 @@ fun PostLogScreen(navController: NavController, token: String) {
     val logs by postLogViewModel.logs.collectAsState()
 
     Scaffold(
+
         topBar = { TopBar(navController) { scope.launch { drawerState.open() } } },
         bottomBar = {
             AnimatedVisibility(
@@ -70,7 +69,7 @@ fun PostLogScreen(navController: NavController, token: String) {
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         NavigationItem("Home", navController, R.drawable.home, "home/${token}", Color(0xFF4C60A9))
-                        NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen", Color(0xFF4C60A9))
+                        NavigationItem("Attendance", navController, R.drawable.clock, "postlogscreen/${token}", Color(0xFF4C60A9))
                     }
                 }
             }
@@ -82,8 +81,12 @@ fun PostLogScreen(navController: NavController, token: String) {
                 .padding(paddingValues)
                 .verticalScroll(verticalScrollState)
         ) {
-
-            // Top Bar and Back Button
+            Text(
+                text = "Token: $token",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

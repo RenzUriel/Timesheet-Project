@@ -1,4 +1,4 @@
-package com.example.timesheet.data.others
+package com.example.timesheet.data
 
 import android.graphics.Paint
 import android.graphics.Typeface

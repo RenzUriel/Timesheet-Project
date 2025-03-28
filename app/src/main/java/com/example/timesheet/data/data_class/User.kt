@@ -1,7 +1,4 @@
-package com.example.timesheet.data
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+package com.example.timesheet.data.data_class
 import com.google.gson.annotations.SerializedName
 
 data class User(

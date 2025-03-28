@@ -2,7 +2,7 @@ package com.example.timesheet.ui.screen.postlog
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timesheet.data.UserLogs
+import com.example.timesheet.data.data_class.UserLogs
 import com.example.timesheet.data.repository.LogsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
