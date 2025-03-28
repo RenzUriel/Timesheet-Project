@@ -44,11 +44,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
+import com.example.timesheet.data.Temp.LocalAttendanceDataProvider.getAttendanceData
 import com.example.timesheet.data.TimesheetData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
@@ -143,14 +145,14 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                                 modifier = Modifier.padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-//                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
-                                Text(
-                                    text = "Token: $token",  // ✅ Display the token here
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                    modifier = Modifier.padding(16.dp)
-                                )
+                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
+//                                Text(
+//                                    text = "Token: $token",  // ✅ Display the token here
+//                                    fontSize = 20.sp,
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.White,
+//                                    modifier = Modifier.padding(16.dp)
+//                                )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(
                                     modifier = Modifier
@@ -305,3 +307,14 @@ fun formatElapsedTime(seconds: Long): String {
     return String.format("%02d:%02d:%02d", hours, minutes, sec)
 }
 
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    val mockNavController = rememberNavController()
+    HomeScreen(
+        navController = mockNavController,
+        isClockedIn = false,
+        token = "mockToken123",
+        onToggleClockIn = {}
+    )
+}

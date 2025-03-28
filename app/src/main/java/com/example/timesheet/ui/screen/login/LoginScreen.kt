@@ -93,7 +93,8 @@ fun TimeSheetLoginScreen(navController: NavController) {
                         password = password,
                         onSuccess = { token ->
                             Log.e("LoginViewModel", "Login response status: Success")
-                            Toast.makeText(context, "Login Successful\nToken: $token", Toast.LENGTH_LONG).show()
+                            //Toast.makeText(context, "Login Successful\nToken: $token", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
                             navController.navigate("home/$token")
                         },
                         onFailure = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
