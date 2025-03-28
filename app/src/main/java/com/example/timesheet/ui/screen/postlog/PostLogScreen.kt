@@ -138,8 +138,8 @@ fun PostLogScreen(navController: NavController, token: String) {
                     ) {
                         TableCell(text = log.id?.toString()?.takeLast(4) ?: "N/A")
                         TableCell(text = log.attendanceStatus ?: "N/A")
-                        TableCell(text = formatDate(log.timeIn) ?: "N/A")
-                        TableCell(text = formatDate(log.timeOut) ?: "N/A")
+                        TableCell(text = formatTime(log.timeIn) ?: "N/A")
+                        TableCell(text = formatTime(log.timeOut) ?: "N/A")
                         TableCell(text = log.totalHours100?.toString() ?: "N/A")
                     }
                 }
@@ -157,6 +157,17 @@ fun formatDate(timestamp: Long?): String? {
         null
     }
 }
+
+fun formatTime(timestamp: Long?): String? {
+    return if (timestamp != null) {
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault()) // Format to hh:mm AM/PM
+        val date = Date(timestamp)
+        sdf.format(date)
+    } else {
+        null
+    }
+}
+
 
 @Composable
 fun TableCell(text: String, isHeader: Boolean = false) {
