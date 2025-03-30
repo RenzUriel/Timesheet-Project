@@ -1,10 +1,12 @@
-package com.example.timesheet.api
+package com.example.timesheet.networks
 
 
-import com.example.timesheet.data.User
+import com.example.timesheet.data.data_class.LogsResponse
+import com.example.timesheet.data.data_class.User
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface ApiService {
@@ -16,10 +18,8 @@ interface ApiService {
         @Field("password") password: String
     ): User
 
-    @FormUrlEncoded
-    @GET
-    suspend fun logs(
-        @Field("_id") id: Int,
-        @Field("User_id") user_id: Int
-    )
+    @GET("logs")
+    suspend fun getLogs(
+        @Header("Authorization") token: String
+    ): LogsResponse
 }

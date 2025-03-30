@@ -11,8 +11,8 @@ import com.example.timesheet.ui.screen.ForgotScreen
 import com.example.timesheet.ui.screen.HomeScreen
 import com.example.timesheet.ui.screen.AttendanceScreen
 import com.example.timesheet.ui.screen.SignUpScreen
-import com.example.timesheet.ui.screen.PostLogScreen
 import com.example.timesheet.ui.screen.login.TimeSheetLoginScreen
+import com.example.timesheet.ui.screen.postlog.PostLogScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,13 +25,17 @@ class MainActivity : ComponentActivity() {
                 composable("login") { TimeSheetLoginScreen(navController) }
                 composable("signup") { SignUpScreen(navController) }
                 composable("forgot") { ForgotScreen(navController) }
-                composable("home") { HomeScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }
+                composable("home/{token}") { backStackEntry ->
+                    val token = backStackEntry.arguments?.getString("token") ?: ""
+                    HomeScreen(navController, isClockedIn, token) { isClockedIn = !isClockedIn }
+                }
                 composable("attendance_screen") { AttendanceScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }
                 composable("logout") { TimeSheetLoginScreen(navController) }
-                composable("postlogscreen") { PostLogScreen(navController) }
+                composable("postlogscreen/{token}") { backStackEntry ->
+                    val token = backStackEntry.arguments?.getString("token") ?: ""
+                    PostLogScreen(navController, token)
+                }
             }
-
-            //test
         }
     }
 }

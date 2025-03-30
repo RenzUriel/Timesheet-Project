@@ -23,13 +23,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -43,19 +40,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.data.LocalAttendanceDataProvider.getAttendanceData
+import com.example.timesheet.data.Temp.LocalAttendanceDataProvider.getAttendanceData
 import com.example.timesheet.data.TimesheetData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
@@ -63,9 +58,7 @@ import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.features.TimerProgressBar
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
-import com.example.timesheet.ui.theme.gradientNightLight
 import com.example.timesheet.ui.theme.gradientSky
-import com.example.timesheet.ui.theme.gradientSky2
 import com.example.timesheet.ui.theme.gradientSoftCyan
 import com.example.timesheet.ui.theme.gradientSunset
 import kotlinx.coroutines.launch
@@ -76,7 +69,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClockIn: (Boolean) -> Unit) {
+fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String, onToggleClockIn: (Boolean) -> Unit) {
     val context = LocalContext.current
     val timeFormat = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
     val currentDate = Calendar.getInstance()
@@ -124,13 +117,14 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            NavigationItem("Home", navController, R.drawable.home, "home", Color(0xFF4C60A9))
-                            NavigationItem("Attendance", navController, R.drawable.clock, "attendance_screen")
+                            NavigationItem("Home", navController, R.drawable.home, "home/${token}", Color(0xFF4C60A9))
+                            NavigationItem("Attendance", navController, R.drawable.clock, "postlogscreen/${token}")
                         }
                     }
                 }
             }
         ) { innerPadding ->
+
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
                     modifier = Modifier
@@ -140,42 +134,49 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     verticalArrangement = Arrangement.spacedBy(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(gradientSky),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Box(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(gradientSky),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .fillMaxWidth()
-                                    .background(Color.White)
-                                    .padding(16.dp),
-                                contentAlignment = Alignment.Center
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
+//                                Text(
+//                                    text = "Token: $token",  // ✅ Display the token here
+//                                    fontSize = 20.sp,
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.White,
+//                                    modifier = Modifier.padding(16.dp)
+//                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(16.dp))
+                                        .fillMaxWidth()
+                                        .background(Color.White)
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    Text(month.uppercase(), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                    Text(day, fontSize = 70.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                                    Text(year, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(month.uppercase(), fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(day, fontSize = 70.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                        Text(year, fontSize = 40.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                                    }
                                 }
                             }
                         }
-                    }
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .background(getGradientForTime())
+                            .background(gradientDayLight)
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
@@ -236,7 +237,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
                     }
 
 
-                    TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
+                        TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
@@ -281,21 +282,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, onToggleClock
     }
 }
 
-fun getGradientForTime(): Brush {
-    val now = java.util.Calendar.getInstance()
-    val hour = now.get(java.util.Calendar.HOUR_OF_DAY)
-    val minute = now.get(java.util.Calendar.MINUTE)
-
-    val totalMinutes = hour * 60 + minute
-
-    return when {
-        totalMinutes in (5 * 60 + 30)..(7 * 60 + 59) -> gradientDayLight  // 5:30 AM - 7:59 AM
-        totalMinutes in (8 * 60)..(17 * 60 + 59) -> gradientSky2          // 8:00 AM - 5:59 PM
-        else -> gradientNightLight                                        // 6:00 PM - 5:29 AM
-    }
-}
-
-
 @Composable
 fun NavigationItem(label: String, navController: NavController, iconRes: Int, route: String, color: Color = Color.Gray, onClick: (() -> Unit)? = null) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -323,9 +309,12 @@ fun formatElapsedTime(seconds: Long): String {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewHomeScreen() {
-    val navController = rememberNavController()
-    var isClockedIn by remember { mutableStateOf(false) }
-
-    HomeScreen(navController, isClockedIn) { isClockedIn = !isClockedIn }
+fun HomeScreenPreview() {
+    val mockNavController = rememberNavController()
+    HomeScreen(
+        navController = mockNavController,
+        isClockedIn = false,
+        token = "mockToken123",
+        onToggleClockIn = {}
+    )
 }
