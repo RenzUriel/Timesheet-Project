@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontVariation.width
@@ -36,6 +41,7 @@ import com.example.timesheet.features.DrawerMenu
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.screen.NavigationItem
 import com.example.timesheet.ui.theme.gradientSoftCyan
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -44,14 +50,13 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostLogScreen(navController: NavController, token: String) {
-    val horizontalScrollState = rememberScrollState()
-    val verticalScrollState = rememberScrollState()
+    val screenScrollState = rememberScrollState()
+    val cardVerticalScrollState = rememberScrollState() // 🔹 UPDATED
+    val cardHorizontalScrollState = rememberScrollState() // 🔹 UPDATED
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-
     val postLogViewModel: PostLogViewModel = viewModel()
 
-    // Fetch logs when the screen is first loaded
     LaunchedEffect(key1 = token) {
         postLogViewModel.fetchLogs(token)
     }
@@ -92,9 +97,8 @@ fun PostLogScreen(navController: NavController, token: String) {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .verticalScroll(verticalScrollState)
+                    .verticalScroll(screenScrollState)
             ) {
-                // Log Report Card
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -109,46 +113,52 @@ fun PostLogScreen(navController: NavController, token: String) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(350.dp)
+                        .height(450.dp)
                         .padding(16.dp),
                     shape = RoundedCornerShape(12.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
-                    Column {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(gradientSoftCyan)
-                                .padding(20.dp)
-                        ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.activity_tracker),
-                                    contentDescription = "Log Icon",
-                                    modifier = Modifier.size(24.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = "Log Report",
-                                    color = Color.White,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(gradientSoftCyan)
+                            .padding(20.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Image(
+                                painter = painterResource(id = R.drawable.activity_tracker),
+                                contentDescription = "Log Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Log Report",
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
+                    }
 
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp)
+                            .scrollIndicators(
+                                verticalState = cardVerticalScrollState,
+                                horizontalState = cardHorizontalScrollState
+                            )
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(8.dp)
-                                .verticalScroll(verticalScrollState)
+                                .verticalScroll(cardVerticalScrollState)
                         ) {
                             Row(
                                 modifier = Modifier
-                                    //.background(Color.Gray)
                                     .padding(8.dp)
-                                    .horizontalScroll(horizontalScrollState)
+                                    .horizontalScroll(cardHorizontalScrollState)
                             ) {
                                 TableCell(text = "Date", isHeader = true, modifier = Modifier.width(100.dp))
                                 TableCell(text = "Time-In", isHeader = true, modifier = Modifier.width(100.dp))
@@ -172,7 +182,7 @@ fun PostLogScreen(navController: NavController, token: String) {
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(top = 8.dp)
-                                            .horizontalScroll(horizontalScrollState)
+                                            .horizontalScroll(cardHorizontalScrollState) // 🔹 UPDATED
                                     ) {
                                         TableCell(text = formatDate(log.date) ?: "N/A", modifier = Modifier.width(100.dp))
                                         TableCell(text = formatTime(log.timeIn) ?: "N/A", modifier = Modifier.width(100.dp))
@@ -190,6 +200,7 @@ fun PostLogScreen(navController: NavController, token: String) {
         }
     }
 }
+
 
 fun formatDate(timestamp: Long?): String? {
     return if (timestamp != null) {
@@ -216,7 +227,7 @@ fun formatTime(timestamp: Long?): String? {
 fun TableCell(
     text: String,
     isHeader: Boolean = false,
-    modifier: Modifier = Modifier // ✅ Add modifier parameter
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
@@ -236,6 +247,54 @@ fun TableCell(
         )
     }
 }
+
+@Composable
+fun Modifier.scrollIndicators(
+    verticalState: ScrollState? = null,
+    horizontalState: ScrollState? = null
+): Modifier {
+    var isScrollingVertically by remember { mutableStateOf(false) }
+    var isScrollingHorizontally by remember { mutableStateOf(false) }
+
+    LaunchedEffect(verticalState?.value) {
+        if (verticalState != null) {
+            isScrollingVertically = true
+            delay(500)
+            isScrollingVertically = false
+        }
+    }
+
+    LaunchedEffect(horizontalState?.value) {
+        if (horizontalState != null) {
+            isScrollingHorizontally = true
+            delay(500)
+            isScrollingHorizontally = false
+        }
+    }
+
+    return this.then(
+        Modifier.drawWithContent {
+            drawContent()
+
+            if (verticalState != null && verticalState.maxValue > 0 && isScrollingVertically) {
+                drawRect(
+                    color = Color.Gray.copy(alpha = 0.5f),
+                    topLeft = Offset(size.width - 8.dp.toPx(), (size.height * verticalState.value / verticalState.maxValue)),
+                    size = Size(8.dp.toPx(), 50.dp.toPx())
+                )
+            }
+
+            if (horizontalState != null && horizontalState.maxValue > 0 && isScrollingHorizontally) {
+                drawRect(
+                    color = Color.Gray.copy(alpha = 0.5f),
+                    topLeft = Offset((size.width * horizontalState.value / horizontalState.maxValue), size.height - 8.dp.toPx()),
+                    size = Size(50.dp.toPx(), 8.dp.toPx())
+                )
+            }
+        }
+    )
+}
+
 
 
 @Preview(showBackground = true)
