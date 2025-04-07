@@ -64,6 +64,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("com.itextpdf:itext7-core:7.1.15")
 
     // Retrofit
     implementation(libs.okhttp)
