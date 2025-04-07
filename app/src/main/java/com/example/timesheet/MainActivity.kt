@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
                 composable("forgot") { ForgotScreen(navController) }
                 composable("home/{token}") { backStackEntry ->
                     val token = backStackEntry.arguments?.getString("token") ?: ""
+
                     HomeScreen(navController, isClockedIn, token) { isClockedIn = !isClockedIn }
                 }
                 composable("attendance_screen") { AttendanceScreen(navController, isClockedIn) { isClockedIn = !isClockedIn } }

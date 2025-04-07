@@ -68,7 +68,7 @@ fun ForgotScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp)) // test
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = { /* Handle next action */ },
