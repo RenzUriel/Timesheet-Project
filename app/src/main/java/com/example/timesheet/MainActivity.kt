@@ -7,10 +7,10 @@ import androidx.compose.runtime.*
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.timesheet.ui.screen.ForgotScreen
+import com.example.timesheet.ui.screen.misc.ForgotScreen
 import com.example.timesheet.ui.screen.HomeScreen
-import com.example.timesheet.ui.screen.AttendanceScreen
-import com.example.timesheet.ui.screen.SignUpScreen
+import com.example.timesheet.ui.screen.misc.AttendanceScreen
+import com.example.timesheet.ui.screen.misc.SignUpScreen
 import com.example.timesheet.ui.screen.login.TimeSheetLoginScreen
 import com.example.timesheet.ui.screen.postlog.PostLogScreen
 

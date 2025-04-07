@@ -1,4 +1,4 @@
-package com.example.timesheet.ui.screen
+package com.example.timesheet.ui.screen.misc
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

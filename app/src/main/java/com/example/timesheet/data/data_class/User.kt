@@ -14,7 +14,7 @@ data class UserResponse(
     val expires: Long
 )
 data class UserLogs(
-    @SerializedName("User _id") val userId: String,
+    @SerializedName("User_id") val userId: String,
     @SerializedName("Attendance Status") val attendanceStatus: String,
     @SerializedName("Created Date") val createdDate: Long,
     @SerializedName("time-out") val timeOut: Long,

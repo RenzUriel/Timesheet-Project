@@ -38,8 +38,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
 import com.example.timesheet.features.AttendanceAnalytics
 import com.example.timesheet.features.DrawerMenu
+import com.example.timesheet.features.NavigationItem
 import com.example.timesheet.ui.components.TopBar
-import com.example.timesheet.ui.screen.NavigationItem
 import com.example.timesheet.ui.theme.gradientSoftCyan
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -201,7 +201,6 @@ fun PostLogScreen(navController: NavController, token: String) {
     }
 }
 
-
 fun formatDate(timestamp: Long?): String? {
     return if (timestamp != null) {
         val sdf = SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()) // MM for months
@@ -222,7 +221,6 @@ fun formatTime(timestamp: Long?): String? {
     }
 }
 
-
 @Composable
 fun TableCell(
     text: String,
@@ -231,7 +229,7 @@ fun TableCell(
 ) {
     Box(
         modifier = modifier
-            .height(48.dp) // Consistent height for all cells
+            .height(48.dp)
             .padding(4.dp)
             .background(if (isHeader) Color.LightGray else Color.Transparent, RoundedCornerShape(4.dp))
             .padding(8.dp),
@@ -294,8 +292,6 @@ fun Modifier.scrollIndicators(
         }
     )
 }
-
-
 
 @Preview(showBackground = true)
 @Composable

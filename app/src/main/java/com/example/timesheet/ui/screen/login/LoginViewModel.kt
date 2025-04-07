@@ -57,7 +57,7 @@ class LoginViewModel(
                 val logsResponse = logsRepository.getLogs(token)
                 _logs.value = logsResponse
             } catch (e: Exception) {
-
+                Log.e("LoginViewmodel", " fetching logs error", e)
             }
         }
     }

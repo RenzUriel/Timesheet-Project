@@ -67,6 +67,7 @@ import com.example.timesheet.data.TimesheetData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
 import com.example.timesheet.features.DrawerMenu
+import com.example.timesheet.features.NavigationItem
 import com.example.timesheet.features.TimerProgressBar
 import com.example.timesheet.ui.components.TopBar
 import com.example.timesheet.ui.theme.gradientDayLight
@@ -90,7 +91,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
     val month = remember { SimpleDateFormat("MMMM", Locale.getDefault()).format(currentDate.time) }
     val day = remember { SimpleDateFormat("d", Locale.getDefault()).format(currentDate.time) }
     val year = remember { SimpleDateFormat("yyyy", Locale.getDefault()).format(currentDate.time) }
-    val attendanceData = getAttendanceData()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -175,13 +175,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text("TODAY IS", fontSize = 50.sp, color = Color.White, fontWeight = FontWeight.Bold)
-//                                Text(
-//                                    text = "Token: $token",  // ✅ Display the token here
-//                                    fontSize = 20.sp,
-//                                    fontWeight = FontWeight.Bold,
-//                                    color = Color.White,
-//                                    modifier = Modifier.padding(16.dp)
-//                                )
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Box(
                                     modifier = Modifier
@@ -258,7 +251,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    // Sand Timer Icon
                                     Image(
                                         painter = painterResource(id = R.drawable.sand_timer),
                                         contentDescription = "Sand Timer",
@@ -266,7 +258,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                                             .size(26.dp)
                                             .padding(end = 4.dp)
                                     )
-                                    // Elapsed Time
                                     Text(
                                         text = "${formatElapsedTime(elapsedTime)}",
                                         fontSize = 24.sp,
@@ -274,7 +265,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                                         color = Color.White
                                     )
                                 }
-                                // Hours Worked
                                 Text(
                                     text = "HOURS WORKED",
                                     fontSize = 16.sp,
@@ -285,8 +275,7 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                         }
                     }
 
-
-                        TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
+                    TimerProgressBar(elapsedTime = elapsedTime, gradientSunset = gradientSunset)
                     Box(
                         modifier = Modifier
                             .padding(16.dp)
@@ -295,7 +284,6 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
                             .fillMaxWidth()
                     ) {
                         Column {
-                            // Header
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -392,24 +380,6 @@ fun getAddressFromCoordinates(context: Context, latitude: Double, longitude: Dou
 }
 
 
-
-@Composable
-fun NavigationItem(label: String, navController: NavController, iconRes: Int, route: String, color: Color = Color.Gray, onClick: (() -> Unit)? = null) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        IconButton(onClick = {
-            navController.navigate(route)
-            onClick?.invoke()
-        }) {
-            Icon(
-                painter = painterResource(id = iconRes),
-                contentDescription = label,
-                modifier = Modifier.size(25.dp),
-                tint = color
-            )
-        }
-        Text(label, fontSize = 12.sp, maxLines = 1, color = color)
-    }
-}
 
 fun formatElapsedTime(seconds: Long): String {
     val hours = seconds / 3600

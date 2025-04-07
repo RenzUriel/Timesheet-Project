@@ -1,6 +1,6 @@
 package com.example.timesheet.data.Temp
 
-import com.example.timesheet.data.AttendanceSheetData
+import com.example.timesheet.data.misc.AttendanceSheetData
 
 object LocalAttendanceDataProvider {
     val defaultAttendance = getAttendanceData()[0]
