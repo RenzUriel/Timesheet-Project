@@ -65,7 +65,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation("com.itextpdf:itext7-core:7.1.15")
-
+    implementation("io.coil-kt:coil-compose:2.4.0")
     // Retrofit
     implementation(libs.okhttp)
     implementation (libs.logging.interceptor)

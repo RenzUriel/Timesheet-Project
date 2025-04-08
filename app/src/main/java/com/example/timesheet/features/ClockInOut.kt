@@ -129,14 +129,14 @@ fun TimerProgressBar(elapsedTime: Long, totalTime: Long = 600L, gradientSunset: 
             .padding(16.dp)
             .height(10.dp)
             .clip(RoundedCornerShape(50))
-            .background(Color(0xFFB0BEC5)) // Track color (Gray)
+            .background(Color(0xFFB0BEC5))
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth(progress)
                 .height(10.dp)
                 .clip(RoundedCornerShape(50))
-                .background(brush = gradientSunset) // Use the provided gradient
+                .background(brush = gradientSunset)
         )
     }
 }

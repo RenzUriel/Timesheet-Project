@@ -1,5 +1,9 @@
 package com.example.timesheet.features
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,6 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,25 +42,51 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.timesheet.R
 import com.example.timesheet.ui.theme.largeRadialGradient
 
 @Composable
 fun DrawerMenu(navController: NavController, onClose: () -> Unit) {
-    var showDialog by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    var showImageDialog by remember { mutableStateOf(false) }
+
+    // Declare the imageLauncher here
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        // Handle the result from the image picker here
+        uri?.let {
+            showImageDialog = true
+        }
+    }
 
     DrawerMenuUI(
-        onLogoutClick = { showDialog = true },
-        onEditProfileClick = { /* Handle profile edit click */ }
+        onLogoutClick = { showLogoutDialog = true },
+        onEditProfileClick = { imageLauncher.launch("image/*") }
     )
 
-    if (showDialog) {
+    if (showLogoutDialog) {
         LogoutDialog(
             onConfirm = {
-                showDialog = false
+                showLogoutDialog = false
                 navController.navigate("login")
             },
-            onDismiss = { showDialog = false }
+            onDismiss = { showLogoutDialog = false }
+        )
+    }
+
+    if (showImageDialog) {
+        // Change profile picture dialog
+        ChangeProfilePictureDialog(
+            onConfirm = {
+                // Handle image saving or confirmation
+                showImageDialog = false
+            },
+            onDismiss = {
+                // Handle dismissing the image dialog
+                showImageDialog = false
+            }
         )
     }
 }
@@ -79,7 +111,7 @@ fun DrawerMenuUI(onLogoutClick: () -> Unit, onEditProfileClick: () -> Unit) {
             ) {
                 HeaderSection()
                 Spacer(modifier = Modifier.height(24.dp))
-                ProfileSection(onEditProfileClick)
+                ProfileSection(onEditProfileClick)  // Call profile section with image launcher action
                 Spacer(modifier = Modifier.weight(0.8f))
                 LogoutButton(onLogoutClick)
             }
@@ -113,27 +145,78 @@ fun HeaderSection() {
 
 @Composable
 fun ProfileSection(onEditProfileClick: () -> Unit) {
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
+    var tempImageUri by remember { mutableStateOf<Uri?>(null) }
+
+
+    val context = LocalContext.current
+    val imageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        uri?.let {
+            tempImageUri = it
+            showDialog = true
+        }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Change Profile Picture") },
+            text = { Text("Do you want to save this image as your new profile picture?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    selectedImageUri = tempImageUri
+                    showDialog = false
+                }) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    tempImageUri = null
+                    showDialog = false
+                }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(modifier = Modifier.size(90.dp), contentAlignment = Alignment.BottomEnd) {
-            Icon(
-                painter = painterResource(id = R.drawable.placeholder_profile),
-                contentDescription = "Profile Picture",
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape)
-                    .border(3.dp, Color.White, CircleShape),
-                tint = Color.White
-            )
+            if (selectedImageUri != null) {
+                Image(
+                    painter = rememberAsyncImagePainter(selectedImageUri),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .border(3.dp, Color.White, CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Icon(
+                    painter = painterResource(id = R.drawable.placeholder_profile),
+                    contentDescription = "Placeholder Profile Picture",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clip(CircleShape)
+                        .border(3.dp, Color.White, CircleShape),
+                    tint = Color.White
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .size(30.dp)
                     .clip(CircleShape)
                     .background(Color.White)
-                    .clickable { onEditProfileClick() },
+                    .clickable { imageLauncher.launch("image/*") },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -144,11 +227,13 @@ fun ProfileSection(onEditProfileClick: () -> Unit) {
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(8.dp))
         Text("Admin", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
         Text("Administrator", fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray)
     }
 }
+
 
 @Composable
 fun LogoutButton(onLogoutClick: () -> Unit) {
@@ -190,6 +275,25 @@ fun LogoutDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
         dismissButton = {
             TextButton(onClick = onDismiss) {
                 Text("No", color = Color(0xFF4C60A9))
+            }
+        }
+    )
+}
+
+@Composable
+fun ChangeProfilePictureDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Change Profile Picture") },
+        text = { Text("Do you want to save this image as your new profile picture?") },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Save")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
             }
         }
     )
