@@ -1,4 +1,4 @@
-package com.example.timesheet.ui.screen
+package com.example.timesheet.ui.screen.homescreen
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -33,8 +33,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -59,10 +57,10 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.timesheet.R
-import com.example.timesheet.data.Temp.LocalAttendanceDataProvider.getAttendanceData
 import com.example.timesheet.data.TimesheetData
 import com.example.timesheet.data.TrackedHoursGraph
 import com.example.timesheet.features.ClockInOutButton
@@ -93,10 +91,11 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
     val year = remember { SimpleDateFormat("yyyy", Locale.getDefault()).format(currentDate.time) }
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val viewModel: HomeViewModel = viewModel()
 
-
-    var isDrawerOpen by remember { mutableStateOf(false) }
-    var elapsedTime by remember { mutableStateOf(0L) }
+    var isDrawerOpen by remember { mutableStateOf(false) } // Observe the clock-in state and elapsed time
+    val isClockedIn = viewModel.isClockedIn.value
+    val elapsedTime = viewModel.elapsedTime.value
     val REQUEST_CODE = 100
     val currentLocation = getCurrentLocation(context)
 
@@ -126,9 +125,15 @@ fun HomeScreen(navController: NavController, isClockedIn: Boolean, token: String
             floatingActionButton = {
                 ClockInOutButton(
                     isClockedIn = isClockedIn,
-                    onClockToggle = onToggleClockIn,
+                    onClockToggle = { isClockedIn ->
+                        if (isClockedIn) {
+                            viewModel.startClock()
+                        } else {
+                            viewModel.stopClock()
+                        }
+                    },
                     elapsedTime = elapsedTime,
-                    updateElapsedTime = { elapsedTime = it }
+                    updateElapsedTime = { viewModel.elapsedTime.value = it }
                 )
             },
             topBar = { TopBar(navController) { scope.launch { drawerState.open() } } },
