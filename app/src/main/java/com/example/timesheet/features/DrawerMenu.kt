@@ -1,5 +1,7 @@
 package com.example.timesheet.features
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -50,12 +52,9 @@ import com.example.timesheet.ui.theme.largeRadialGradient
 fun DrawerMenu(navController: NavController, onClose: () -> Unit) {
     var showLogoutDialog by remember { mutableStateOf(false) }
     var showImageDialog by remember { mutableStateOf(false) }
-
-    // Declare the imageLauncher here
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        // Handle the result from the image picker here
         uri?.let {
             showImageDialog = true
         }
@@ -77,14 +76,11 @@ fun DrawerMenu(navController: NavController, onClose: () -> Unit) {
     }
 
     if (showImageDialog) {
-        // Change profile picture dialog
         ChangeProfilePictureDialog(
             onConfirm = {
-                // Handle image saving or confirmation
                 showImageDialog = false
             },
             onDismiss = {
-                // Handle dismissing the image dialog
                 showImageDialog = false
             }
         )
@@ -111,7 +107,7 @@ fun DrawerMenuUI(onLogoutClick: () -> Unit, onEditProfileClick: () -> Unit) {
             ) {
                 HeaderSection()
                 Spacer(modifier = Modifier.height(24.dp))
-                ProfileSection(onEditProfileClick)  // Call profile section with image launcher action
+                ProfileSection(onEditProfileClick)
                 Spacer(modifier = Modifier.weight(0.8f))
                 LogoutButton(onLogoutClick)
             }
@@ -145,12 +141,16 @@ fun HeaderSection() {
 
 @Composable
 fun ProfileSection(onEditProfileClick: () -> Unit) {
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val sharedPreferences = remember { context.getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE) }
+
+    var selectedImageUri by remember {
+        mutableStateOf<Uri?>(getStoredProfileImage(sharedPreferences))
+    }
+
     var showDialog by remember { mutableStateOf(false) }
     var tempImageUri by remember { mutableStateOf<Uri?>(null) }
 
-
-    val context = LocalContext.current
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
@@ -168,6 +168,7 @@ fun ProfileSection(onEditProfileClick: () -> Unit) {
             confirmButton = {
                 TextButton(onClick = {
                     selectedImageUri = tempImageUri
+                    saveProfileImage(sharedPreferences, selectedImageUri)  // Save the image URI to SharedPreferences
                     showDialog = false
                 }) {
                     Text("Save")
@@ -234,6 +235,14 @@ fun ProfileSection(onEditProfileClick: () -> Unit) {
     }
 }
 
+private fun saveProfileImage(sharedPreferences: SharedPreferences, uri: Uri?) {
+    sharedPreferences.edit().putString("profile_image_uri", uri?.toString()).apply()
+}
+
+private fun getStoredProfileImage(sharedPreferences: SharedPreferences): Uri? {
+    val uriString = sharedPreferences.getString("profile_image_uri", null)
+    return if (uriString != null) Uri.parse(uriString) else null
+}
 
 @Composable
 fun LogoutButton(onLogoutClick: () -> Unit) {
