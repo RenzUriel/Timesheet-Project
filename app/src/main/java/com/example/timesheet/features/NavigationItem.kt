@@ -15,10 +15,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun NavigationItem(label: String, navController: NavController, iconRes: Int, route: String, color: Color = Color.Gray, onClick: (() -> Unit)? = null) {
+fun NavigationItem(
+    label: String,
+    navController: NavController,
+    iconRes: Int,
+    route: String,
+    color: Color = Color.Gray,
+    onClick: (() -> Unit)? = null
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         IconButton(onClick = {
-            navController.navigate(route)
+            // Navigate with popUpTo to avoid duplicate backstack
+            navController.navigate(route) {
+                // If the destination already exists in the back stack, it will pop it
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(route) { inclusive = true }
+            }
             onClick?.invoke()
         }) {
             Icon(
@@ -31,3 +44,5 @@ fun NavigationItem(label: String, navController: NavController, iconRes: Int, ro
         Text(label, fontSize = 12.sp, maxLines = 1, color = color)
     }
 }
+
+
