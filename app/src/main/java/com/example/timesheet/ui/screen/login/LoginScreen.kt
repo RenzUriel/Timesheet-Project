@@ -27,16 +27,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.timesheet.R
+import com.example.timesheet.TokenManager
 import com.example.timesheet.ui.components.InputField
 import com.example.timesheet.ui.components.StandardButton
 
 @Composable
 fun TimeSheetLoginScreen(navController: NavController) {
-    val loginViewModel: LoginViewModel = viewModel()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val tokenManager = TokenManager(context)
+    val loginViewModel: LoginViewModel = viewModel(factory = LoginViewModelFactory(tokenManager))
+
+
 
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp).verticalScroll(rememberScrollState()),

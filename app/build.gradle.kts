@@ -73,4 +73,14 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.converter.gson)
+    implementation ("androidx.datastore:datastore-preferences:1.1.4")
+
+
+
+
+
+
+
+
+
 }
